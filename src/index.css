@@ -17,3 +17,24 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* High Contrast Accessibility Mode */
+.high-contrast-mode body, .high-contrast-mode main, .high-contrast-mode footer, .high-contrast-mode nav, .high-contrast-mode div {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.high-contrast-mode p, .high-contrast-mode span, .high-contrast-mode h1, .high-contrast-mode h2, .high-contrast-mode h3, .high-contrast-mode a, .high-contrast-mode button {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+.high-contrast-mode body {
+  font-size: 115% !important;
+}
+
+.high-contrast-mode svg {
+  stroke: #000000 !important;
+  color: #000000 !important;
+}

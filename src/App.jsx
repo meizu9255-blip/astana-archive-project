@@ -9,10 +9,12 @@ import Services from './pages/Services';
 import Contacts from './pages/Contacts';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+import { AccessibilityProvider } from './AccessibilityContext';
 
 function App() {
   return (
-    <BrowserRouter>
+    <AccessibilityProvider>
+      <BrowserRouter>
       <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
         <Navbar />
         <main className="flex-grow">
@@ -29,6 +31,7 @@ function App() {
         <Footer />
       </div>
     </BrowserRouter>
+    </AccessibilityProvider>
   );
 }
 

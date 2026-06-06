@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, Landmark, Moon, Sun } from 'lucide-react';
+import { Menu, X, Globe, Landmark, Moon, Sun, Eye, EyeOff } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import { useAccessibility } from '../AccessibilityContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { lang, toggleLanguage, t } = useLanguage();
+  const { isHighContrast, toggleHighContrast } = useAccessibility();
 
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -65,6 +67,15 @@ export default function Navbar() {
               </Link>
             ))}
             
+            {/* Accessibility Mode Toggle */}
+            <button 
+              onClick={toggleHighContrast}
+              className={`text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
+              title="Режим для слабовидящих"
+            >
+              {isHighContrast ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+
             {/* Dark Mode Toggle */}
             <button 
               onClick={() => setDarkMode(!darkMode)}
@@ -93,6 +104,12 @@ export default function Navbar() {
           </div>
 
           <div className="md:hidden flex items-center space-x-4">
+            <button 
+              onClick={toggleHighContrast}
+              className={`text-white/70 hover:text-brand-gold transition focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
+            >
+              {isHighContrast ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
+            </button>
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className="text-white/70 hover:text-brand-gold transition focus:outline-none"
