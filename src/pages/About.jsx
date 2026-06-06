@@ -49,7 +49,7 @@ export default function About() {
           <div className="inline-flex items-center justify-center p-4 bg-brand-blue/10 dark:bg-brand-blue/20 rounded-full mb-6">
             <Shield className="w-10 h-10 text-brand-blue dark:text-brand-cyan" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-8">
             {lang === 'ru' ? 'Наша миссия' : 'Біздің миссиямыз'}
           </h1>
           <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-8"></div>
@@ -71,7 +71,7 @@ export default function About() {
             variants={fadeInUp}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4">
               {lang === 'ru' ? 'Архив в цифрах' : 'Мұрағат сандармен'}
             </h2>
           </motion.div>
@@ -92,7 +92,7 @@ export default function About() {
                 <div className="w-16 h-16 mx-auto bg-brand-gold/20 flex items-center justify-center rounded-2xl mb-6">
                   <stat.icon className="w-8 h-8 text-brand-dark dark:text-brand-gold" />
                 </div>
-                <div className="text-4xl font-extrabold text-brand-blue dark:text-brand-cyan mb-2">
+                <div className="text-3xl md:text-4xl font-extrabold text-brand-blue dark:text-brand-cyan mb-2">
                   {stat.value}
                 </div>
                 <div className="text-lg font-medium text-slate-600 dark:text-slate-300">
@@ -114,7 +114,7 @@ export default function About() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
         >
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-2xl md:text-4xl font-bold mb-6">
               {lang === 'ru' ? 'Технологический вектор' : 'Технологиялық бағыт'}
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
@@ -163,7 +163,7 @@ export default function About() {
             variants={fadeInUp}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4">
               {lang === 'ru' ? 'Структура и подразделения' : 'Құрылым және бөлімшелер'}
             </h2>
             <div className="w-16 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>

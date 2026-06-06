@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="bg-brand-dark text-white/80 pt-16 pb-8 border-t-[4px] border-brand-gold mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-3 text-white mb-6">
@@ -87,7 +87,7 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs gap-4 md:gap-0 text-center md:text-left">
           <p>&copy; {new Date().getFullYear()} {t.footer.rights}</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link to="#" className="hover:text-brand-gold transition">{t.footer.privacy}</Link>

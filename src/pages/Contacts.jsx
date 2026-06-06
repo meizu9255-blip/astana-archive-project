@@ -74,7 +74,7 @@ export default function Contacts() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
         
         <div className="mb-16 text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{c.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{c.title}</h1>
           <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
           <p className="text-lg text-slate-600 dark:text-slate-400">{c.desc}</p>
         </div>

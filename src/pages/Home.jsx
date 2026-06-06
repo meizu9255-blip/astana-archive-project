@@ -48,7 +48,7 @@ export default function Home() {
         
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
               {typedTitle}<span className="animate-pulse">|</span> <br/><span className="text-brand-gold">{t.home.subtitle}</span>
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl leading-relaxed">
@@ -85,7 +85,7 @@ export default function Home() {
       <section className="py-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">{t.home.popularServices}</h2>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{t.home.popularServices}</h2>
             <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full"></div>
           </div>
           
@@ -111,7 +111,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">{t.home.latestNews}</h2>
+              <h2 className="text-2xl md:text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{t.home.latestNews}</h2>
               <div className="w-24 h-1 bg-brand-gold rounded-full"></div>
             </div>
             <Link to="/about" className="hidden sm:inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold transition-colors">

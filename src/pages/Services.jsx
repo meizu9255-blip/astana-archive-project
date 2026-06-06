@@ -84,7 +84,7 @@ export default function Services() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
         
         <div className="mb-10 text-center">
-          <h1 className="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{s.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{s.title}</h1>
           <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">{s.desc}</p>
         </div>
