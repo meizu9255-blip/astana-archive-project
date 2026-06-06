@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
 import { Search, Download, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 export default function Admin() {
@@ -87,35 +88,30 @@ export default function Admin() {
     return nameMatch || iinMatch;
   });
 
-  const handleExportCSV = () => {
+  const handleExportExcel = () => {
     const headers = ['ID', 'Дата', 'ФИО', 'ИИН', 'Телефон', 'Email', 'Услуга', 'Запрос', 'Статус'];
     
     const rows = filteredRequests.map(req => {
       const statusLabel = statuses.find(s => s.value === req.status)?.label || req.status;
-      const typeEscaped = req.type ? req.type.replace(/"/g, '""') : '';
-      const queryEscaped = req.query ? req.query.replace(/"/g, '""') : '';
       return [
-        `"${req.id}"`,
-        `"${new Date(req.date).toLocaleDateString('ru-RU')}"`,
-        `"${req.full_name || ''}"`,
-        `"${req.iin || ''}"`,
-        `"${req.phone || ''}"`,
-        `"${req.email || ''}"`,
-        `"${typeEscaped}"`,
-        `"${queryEscaped}"`,
-        `"${statusLabel}"`
+        req.id,
+        new Date(req.date).toLocaleDateString('ru-RU'),
+        req.full_name || '',
+        req.iin || '',
+        req.phone || '',
+        req.email || '',
+        req.type || '',
+        req.query || '',
+        statusLabel
       ];
     });
 
-    const csvContent = "\uFEFF" + [headers.map(h => `"${h}"`), ...rows].map(e => e.join(";")).join("\n");
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'zayavki_astana_archive.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const worksheetData = [headers, ...rows];
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Заявки');
+
+    XLSX.writeFile(workbook, 'zayavki_astana_archive.xlsx', { bookType: 'xlsx', type: 'binary' });
   };
 
   if (!isAuthenticated) {
@@ -209,11 +205,11 @@ export default function Admin() {
               />
             </div>
             <button
-              onClick={handleExportCSV}
+              onClick={handleExportExcel}
               className="flex items-center w-full sm:w-auto px-4 py-2 bg-brand-blue text-white font-semibold rounded-lg hover:bg-brand-dark transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
-              Экспорт в CSV
+              Экспорт в Excel
             </button>
           </div>
         )}
