@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../LanguageContext';
 import { motion } from 'framer-motion';
-import { Shield, BookOpen, Clock, Users, Database, Server, Smartphone, User, Code, FileSearch } from 'lucide-react';
+import { Shield, BookOpen, Clock, Users, Database, Server, Smartphone, User, Code, FileSearch, FileText } from 'lucide-react';
 
 const stats = [
   { id: 1, icon: BookOpen, value: '850 000+', label_ru: 'Единиц хранения', label_kz: 'Сақтау бірліктері' },
@@ -9,10 +9,11 @@ const stats = [
   { id: 3, icon: Users, value: '150 000+', label_ru: 'Обслуженных граждан', label_kz: 'Қызмет көрсетілген азаматтар' }
 ];
 
-const team = [
-  { id: 1, name: 'Бимолдин Жангельды Бержанович', role_ru: 'Директор архива', role_kz: 'Мұрағат директоры', icon: User },
-  { id: 2, name: 'Айгерим Смагулова', role_ru: 'Руководитель экспертного отдела', role_kz: 'Сарапшылар бөлімінің басшысы', icon: FileSearch },
-  { id: 3, name: 'Тимур Ахметов', role_ru: 'Руководитель IT-отдела', role_kz: 'IT-бөлімінің басшысы', icon: Code }
+const departments = [
+  { id: 1, name_ru: 'Руководство', name_kz: 'Басшылық', desc_ru: 'Определение стратегических целей архива, координация работы всех подразделений.', desc_kz: 'Мұрағаттың стратегиялық мақсаттарын айқындау, барлық бөлімшелердің жұмысын үйлестіру.', icon: User },
+  { id: 2, name_ru: 'Отдел формирования фондов', name_kz: 'Қорларды қалыптастыру бөлімі', desc_ru: 'Поиск, прием и регистрация новых документов, имеющих историческую ценность.', desc_kz: 'Тарихи құндылығы бар жаңа құжаттарды іздеу, қабылдау және тіркеу.', icon: FileText },
+  { id: 3, name_ru: 'Сектор обслуживания пользователей', name_kz: 'Пайдаланушыларға қызмет көрсету секторы', desc_ru: 'Работа с запросами граждан, выдача архивных справок и помощь в читальном зале.', desc_kz: 'Азаматтардың сұраныстарымен жұмыс, мұрағаттық анықтамалар беру және оқу залында көмек көрсету.', icon: Users },
+  { id: 4, name_ru: 'IT-отдел (Техническая поддержка)', name_kz: 'IT-бөлімі (Техникалық қолдау)', desc_ru: 'Оцифровка документов, поддержка баз данных и внедрение цифровых технологий.', desc_kz: 'Құжаттарды цифрландыру, деректер базасын қолдау және цифрлық технологияларды енгізу.', icon: Database }
 ];
 
 const fadeInUp = {
@@ -152,7 +153,7 @@ export default function About() {
         </motion.div>
       </section>
 
-      {/* 4. Наша команда */}
+      {/* 4. Структура и подразделения */}
       <section className="py-20 bg-slate-100 dark:bg-slate-800/50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -163,7 +164,7 @@ export default function About() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {lang === 'ru' ? 'Наша команда' : 'Біздің команда'}
+              {lang === 'ru' ? 'Структура и подразделения' : 'Құрылым және бөлімшелер'}
             </h2>
             <div className="w-16 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
           </motion.div>
@@ -173,21 +174,20 @@ export default function About() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-10"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {team.map(member => (
+            {departments.map(dept => (
               <motion.div 
-                key={member.id} 
+                key={dept.id} 
                 variants={fadeInUp}
-                className="bg-white dark:bg-slate-700 p-8 rounded-2xl text-center border border-slate-200 dark:border-slate-600 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                className="bg-white dark:bg-slate-700 p-8 rounded-2xl border border-slate-200 dark:border-slate-600 shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group flex flex-col items-center text-center"
               >
-                <div className="w-24 h-24 mx-auto bg-slate-100 dark:bg-slate-600 rounded-full flex items-center justify-center mb-6 overflow-hidden border-4 border-slate-50 dark:border-slate-800 shadow-inner">
-                  {/* Заглушка фотографии (плейсхолдер) */}
-                  <member.icon className="w-10 h-10 text-slate-400 dark:text-slate-400" />
+                <div className="w-20 h-20 mx-auto bg-brand-blue/10 dark:bg-slate-600 rounded-full flex items-center justify-center mb-6 overflow-hidden border-4 border-white dark:border-slate-800 group-hover:bg-brand-blue transition-colors duration-300">
+                  <dept.icon className="w-8 h-8 text-brand-blue dark:text-brand-cyan group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">{member.name}</h3>
-                <p className="text-brand-blue dark:text-brand-cyan font-medium">
-                  {lang === 'ru' ? member.role_ru : member.role_kz}
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3 leading-tight">{lang === 'ru' ? dept.name_ru : dept.name_kz}</h3>
+                <p className="text-slate-600 dark:text-slate-400 text-sm flex-grow leading-relaxed">
+                  {lang === 'ru' ? dept.desc_ru : dept.desc_kz}
                 </p>
               </motion.div>
             ))}
