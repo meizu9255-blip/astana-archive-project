@@ -46,14 +46,14 @@ export default function Contacts() {
                 <div className="bg-brand-blue/10 dark:bg-slate-700 p-3 rounded-xl shrink-0"><Phone className="text-brand-blue dark:text-brand-cyan w-6 h-6" /></div>
                 <div>
                   <h4 className="font-bold text-slate-800 dark:text-slate-200">{c.phoneLabel}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 mt-1">+7 (7172) 12-34-56</p>
+                  <p className="text-slate-600 dark:text-slate-400 mt-1">{c.phoneVal}</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-brand-blue/10 dark:bg-slate-700 p-3 rounded-xl shrink-0"><Mail className="text-brand-blue dark:text-brand-cyan w-6 h-6" /></div>
                 <div>
                   <h4 className="font-bold text-slate-800 dark:text-slate-200">{c.emailLabel}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 mt-1">info@archive-astana.kz</p>
+                  <p className="text-slate-600 dark:text-slate-400 mt-1">{c.emailVal}</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
@@ -61,6 +61,36 @@ export default function Contacts() {
                 <div>
                   <h4 className="font-bold text-slate-800 dark:text-slate-200">{c.scheduleLabel}</h4>
                   <p className="text-slate-600 dark:text-slate-400 mt-1">{c.scheduleVal}</p>
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-slate-200 dark:border-slate-700 mt-6">
+                <h4 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">{c.branchesTitle}</h4>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <MapPin className="text-brand-gold w-5 h-5 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="block font-semibold text-slate-700 dark:text-slate-300">{c.branch1Label}</span>
+                      <span className="text-sm text-slate-500 dark:text-slate-400">{c.branch1Val}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <MapPin className="text-brand-gold w-5 h-5 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="block font-semibold text-slate-700 dark:text-slate-300">{c.branch2Label}</span>
+                      <span className="text-sm text-slate-500 dark:text-slate-400">{c.branch2Val}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-slate-200 dark:border-slate-700 mt-6">
+                <div className="flex items-start space-x-3">
+                  <Mail className="text-brand-blue dark:text-brand-cyan w-5 h-5 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="block font-semibold text-slate-700 dark:text-slate-300">{c.techSupportLabel}</span>
+                    <span className="text-sm text-slate-500 dark:text-slate-400">{c.techSupportVal}</span>
+                  </div>
                 </div>
               </div>
             </div>

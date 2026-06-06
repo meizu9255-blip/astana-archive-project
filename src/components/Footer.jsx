@@ -39,15 +39,15 @@ export default function Footer() {
             <ul className="space-y-4 text-sm">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-brand-gold shrink-0 mt-0.5" />
-                <span>г. Астана, район Есиль, ул. Алихана Бокейханова, 1</span>
+                <span>{t.contacts.addressVal}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-brand-gold shrink-0" />
-                <span>+7 (7172) 12-34-56</span>
+                <span>{t.contacts.phoneVal}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-brand-gold shrink-0" />
-                <span>info@archive-astana.kz</span>
+                <span>{t.contacts.emailVal}</span>
               </li>
             </ul>
           </div>
