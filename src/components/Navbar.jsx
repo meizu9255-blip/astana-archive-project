@@ -50,12 +50,12 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+          <div className="hidden md:flex items-center gap-3 lg:gap-6 flex-shrink-0">
             {links.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`transition-colors duration-300 text-sm font-semibold uppercase tracking-wider py-2
+                className={`transition-colors duration-300 text-[11px] lg:text-sm font-semibold uppercase tracking-wider py-2 whitespace-nowrap
                   ${isActive(link.path) 
                     ? 'text-brand-gold border-b-2 border-brand-gold' 
                     : 'text-white/90 hover:text-brand-gold'}
@@ -75,17 +75,17 @@ export default function Navbar() {
             </button>
 
             {/* Переключатель языков Desktop */}
-            <div className="flex items-center space-x-2 border-l border-white/20 pl-6 ml-2">
-              <Globe className="h-4 w-4 text-white/70 mr-1" />
+            <div className="flex items-center gap-2 border-l border-white/20 pl-4 lg:pl-6 ml-2 shrink-0">
+              <Globe className="h-4 w-4 text-white/70" />
               <button 
                 onClick={() => toggleLanguage('kz')}
-                className={`text-sm font-bold px-2 py-1 rounded transition ${lang === 'kz' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
+                className={`text-xs lg:text-sm font-bold px-2 py-1 rounded transition ${lang === 'kz' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
               >
                 KZ
               </button>
               <button 
                 onClick={() => toggleLanguage('ru')}
-                className={`text-sm font-bold px-2 py-1 rounded transition ${lang === 'ru' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
+                className={`text-xs lg:text-sm font-bold px-2 py-1 rounded transition ${lang === 'ru' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
               >
                 RU
               </button>
@@ -108,13 +108,13 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="bg-brand-blue dark:bg-slate-950 border-t border-white/10 px-4 pt-2 pb-4 space-y-1 shadow-inner">
+        <div className="bg-brand-blue dark:bg-slate-950 border-t border-white/10 px-4 pt-4 pb-6 flex flex-col gap-2 shadow-inner">
           {links.map(link => (
             <Link
               key={link.path}
               to={link.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-lg text-base font-semibold uppercase tracking-wide transition-colors
+              className={`block px-4 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-colors whitespace-nowrap
                 ${isActive(link.path) 
                   ? 'bg-white/10 text-brand-gold' 
                   : 'text-white/90 hover:bg-white/5 hover:text-brand-gold'}
@@ -124,17 +124,17 @@ export default function Navbar() {
             </Link>
           ))}
           {/* Переключатель языков Mobile */}
-          <div className="px-4 py-3 flex items-center space-x-2 border-t border-white/10 mt-2">
-            <Globe className="h-5 w-5 text-white/70 mr-2" />
+          <div className="px-4 py-4 flex items-center gap-3 border-t border-white/10 mt-2">
+            <Globe className="h-5 w-5 text-white/70" />
             <button 
               onClick={() => { toggleLanguage('kz'); setIsOpen(false); }}
-              className={`text-sm font-bold px-3 py-1.5 rounded transition ${lang === 'kz' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
+              className={`text-sm font-bold px-4 py-2 rounded-lg transition ${lang === 'kz' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
             >
               KZ
             </button>
             <button 
               onClick={() => { toggleLanguage('ru'); setIsOpen(false); }}
-              className={`text-sm font-bold px-3 py-1.5 rounded transition ${lang === 'ru' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
+              className={`text-sm font-bold px-4 py-2 rounded-lg transition ${lang === 'ru' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
             >
               RU
             </button>
