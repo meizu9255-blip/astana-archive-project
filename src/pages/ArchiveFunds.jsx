@@ -164,18 +164,19 @@ export default function ArchiveFunds() {
             ))}
           </div>
         ) : (
-          <div className="bg-white p-12 rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center">
-            <div className="bg-slate-100 p-4 rounded-full mb-4">
-              <AlertCircle className="h-10 w-10 text-slate-400" />
+          <div className="bg-white dark:bg-slate-800 p-12 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center text-center transition-colors duration-300">
+            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-full mb-6 border-2 border-dashed border-slate-300 dark:border-slate-600">
+              <FolderOpen className="h-12 w-12 text-slate-400 dark:text-slate-500" />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">{f.notFoundTitle}</h3>
-            <p className="text-slate-500 max-w-md">
+            <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">{f.notFoundTitle}</h3>
+            <p className="text-slate-500 dark:text-slate-400 max-w-md">
               {f.notFoundDesc.replace('{query}', searchTerm).replace('{category}', f.categories[activeCategoryIndex])}
             </p>
             <button 
               onClick={() => { setSearchTerm(''); setActiveCategoryIndex(0); }}
-              className="mt-6 text-brand-blue font-bold hover:text-brand-gold transition-colors"
+              className="mt-6 text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold transition-colors flex items-center"
             >
+              <X className="w-4 h-4 mr-1" />
               {f.btnReset}
             </button>
           </div>

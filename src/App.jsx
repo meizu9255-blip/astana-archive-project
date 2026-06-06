@@ -8,6 +8,7 @@ import ArchiveFunds from './pages/ArchiveFunds';
 import Services from './pages/Services';
 import Contacts from './pages/Contacts';
 import Admin from './pages/Admin';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
