@@ -168,42 +168,48 @@ export default function Status() {
             </div>
 
             {/* Прогресс-бар (горизонтальный для md+, вертикальный для mobile) */}
-            <div className="relative">
-              {/* Линия соединяющая шаги */}
-              <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 dark:bg-slate-700 -translate-y-1/2 rounded-full z-0"></div>
-              
-              {/* Активная линия (до текущего шага) */}
-              <div className={`hidden md:block absolute top-1/2 left-0 h-1 bg-brand-gold -translate-y-1/2 rounded-full z-0 transition-all duration-700 ${activeLineClass}`}></div>
-
-              <div className="flex flex-col md:flex-row justify-between relative z-10 gap-8 md:gap-0">
-                {steps.map((step, index) => (
-                  <div key={step.id} className="flex md:flex-col items-center group relative">
-                    
-                    {/* Мобильная линия связи */}
-                    {index !== steps.length - 1 && (
-                      <div className={`md:hidden absolute left-6 top-14 bottom-0 w-1 ${step.status === 'done' ? 'bg-brand-gold' : 'bg-slate-200 dark:bg-slate-700'} z-0`} style={{ height: 'calc(100% + 2rem)' }}></div>
-                    )}
-
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 border-4 relative z-10 transition-transform duration-300 group-hover:scale-110 
-                      ${step.bg} ${step.border} ${step.status === 'current' ? 'ring-4 ring-brand-gold/30' : ''}`}
-                    >
-                      <step.icon className={`w-6 h-6 ${step.color}`} />
-                    </div>
-                    
-                    <div className="ml-4 md:ml-0 md:mt-4 text-left md:text-center">
-                      <div className={`font-bold text-lg md:text-base ${step.status === 'pending' ? 'text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-100'}`}>
-                        {step.title}
-                      </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
-                        {step.status === 'done' && (lang === 'ru' ? 'Выполнено' : 'Орындалды')}
-                        {step.status === 'current' && (lang === 'ru' ? 'Текущий этап' : 'Ағымдағы кезең')}
-                        {step.status === 'pending' && (lang === 'ru' ? 'Ожидает' : 'Күтілуде')}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            {currentDbStatus === 'Отклонено' ? (
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-6 rounded-xl text-center font-bold">
+                Ваша заявка отклонена. Пожалуйста, обратитесь в архив по номеру телефона для уточнения деталей.
               </div>
-            </div>
+            ) : (
+              <div className="relative">
+                {/* Линия соединяющая шаги */}
+                <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 dark:bg-slate-700 -translate-y-1/2 rounded-full z-0"></div>
+                
+                {/* Активная линия (до текущего шага) */}
+                <div className={`hidden md:block absolute top-1/2 left-0 h-1 bg-brand-gold -translate-y-1/2 rounded-full z-0 transition-all duration-700 ${activeLineClass}`}></div>
+
+                <div className="flex flex-col md:flex-row justify-between relative z-10 gap-8 md:gap-0">
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="flex md:flex-col items-center group relative">
+                      
+                      {/* Мобильная линия связи */}
+                      {index !== steps.length - 1 && (
+                        <div className={`md:hidden absolute left-6 top-14 bottom-0 w-1 ${step.status === 'done' ? 'bg-brand-gold' : 'bg-slate-200 dark:bg-slate-700'} z-0`} style={{ height: 'calc(100% + 2rem)' }}></div>
+                      )}
+
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 border-4 relative z-10 transition-transform duration-300 group-hover:scale-110 
+                        ${step.bg} ${step.border} ${step.status === 'current' ? 'ring-4 ring-brand-gold/30' : ''}`}
+                      >
+                        <step.icon className={`w-6 h-6 ${step.color}`} />
+                      </div>
+                      
+                      <div className="ml-4 md:ml-0 md:mt-4 text-left md:text-center">
+                        <div className={`font-bold text-lg md:text-base ${step.status === 'pending' ? 'text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-100'}`}>
+                          {step.title}
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+                          {step.status === 'done' && (lang === 'ru' ? 'Выполнено' : 'Орындалды')}
+                          {step.status === 'current' && (lang === 'ru' ? 'Текущий этап' : 'Ағымдағы кезең')}
+                          {step.status === 'pending' && (lang === 'ru' ? 'Ожидает' : 'Күтілуде')}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
           </motion.div>
         )}

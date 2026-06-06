@@ -24,14 +24,24 @@ export default function Admin() {
     { value: 'Отклонено', label: 'Отклонено' }
   ];
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === 'admin2024') {
-      localStorage.setItem('isAdmin', 'true');
-      setIsAuthenticated(true);
-      setAuthError('');
-    } else {
-      setAuthError('Неверный пароль');
+    setAuthError('');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      if (res.ok) {
+        localStorage.setItem('isAdmin', 'true');
+        setIsAuthenticated(true);
+      } else {
+        const data = await res.json();
+        setAuthError(data.error || 'Неверный пароль');
+      }
+    } catch (err) {
+      setAuthError('Ошибка подключения к серверу');
     }
   };
 
