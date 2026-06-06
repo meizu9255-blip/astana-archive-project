@@ -41,24 +41,24 @@ export default function Navbar() {
 
   return (
     <nav className="bg-brand-blue dark:bg-slate-950 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300 max-w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-3 group">
               <Landmark className="h-9 w-9 text-brand-gold group-hover:scale-105 transition-transform" />
               <div className="flex flex-col text-left justify-center">
-                <span className="text-sm md:text-base font-bold text-white leading-tight uppercase">Астана қаласының Мемлекеттік архиві</span>
-                <span className="text-xs md:text-sm text-yellow-500 whitespace-nowrap leading-tight uppercase">Государственный архив г. Астаны</span>
+                <span className="text-xs xl:text-sm 2xl:text-base font-bold text-white leading-tight uppercase">Астана қаласының Мемлекеттік архиві</span>
+                <span className="text-[10px] xl:text-xs 2xl:text-sm text-yellow-500 whitespace-nowrap leading-tight uppercase">Государственный архив г. Астаны</span>
               </div>
             </Link>
           </div>
 
-          <div className="hidden 2xl:flex items-center gap-6 flex-shrink-0">
+          <div className="hidden 2xl:flex items-center gap-3 2xl:gap-5 flex-shrink-0">
             {links.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`transition-colors duration-300 text-sm font-semibold uppercase tracking-wider py-2 whitespace-nowrap
+                className={`transition-colors duration-300 text-xs 2xl:text-[13px] font-semibold uppercase tracking-wider py-2 whitespace-nowrap
                   ${isActive(link.path) 
                     ? 'text-brand-gold border-b-2 border-brand-gold' 
                     : 'text-white/90 hover:text-brand-gold'}
