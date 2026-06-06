@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, FolderOpen, AlertCircle, X, ArrowRight } from 'lucide-react';
+import { Search, Filter, FolderOpen, AlertCircle, X, ArrowRight, BookOpen, Building2, Camera, FileText } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import DocumentViewer from '../components/DocumentViewer';
 
@@ -31,6 +31,15 @@ export default function ArchiveFunds() {
         setIsLoading(false);
       });
   }, [f.error]);
+
+  const getCategoryStyle = (categoryRu) => {
+    if (!categoryRu) return { icon: FolderOpen, gradient: 'from-slate-100 to-gray-200 dark:from-slate-800 dark:to-gray-700', iconColor: 'text-slate-600 dark:text-slate-400' };
+    if (categoryRu.includes('Дореволюционный')) return { icon: BookOpen, gradient: 'from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20', iconColor: 'text-amber-600 dark:text-amber-500' };
+    if (categoryRu.includes('Советский')) return { icon: FileText, gradient: 'from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-900/20', iconColor: 'text-red-600 dark:text-red-500' };
+    if (categoryRu.includes('Современный')) return { icon: Building2, gradient: 'from-blue-50 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20', iconColor: 'text-blue-600 dark:text-blue-500' };
+    if (categoryRu.includes('Фото')) return { icon: Camera, gradient: 'from-purple-50 to-fuchsia-100 dark:from-purple-900/20 dark:to-fuchsia-900/20', iconColor: 'text-purple-600 dark:text-purple-500' };
+    return { icon: FolderOpen, gradient: 'from-slate-100 to-gray-200 dark:from-slate-800 dark:to-gray-700', iconColor: 'text-slate-600 dark:text-slate-400' };
+  };
 
   const filteredFunds = fundsData.filter(fund => {
     const title = fund[`title_${lang}`].toLowerCase();
@@ -106,42 +115,43 @@ export default function ArchiveFunds() {
         ) : filteredFunds.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredFunds.map(fund => (
-              <div key={fund.id} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group flex flex-col h-full">
+              <div key={fund.id} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group flex flex-col h-full relative overflow-hidden">
                 
-                {/* Изображение с эффектом scale */}
-                <div className="relative h-40 mb-5 overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-700">
-                  <img 
-                    src={fund.image} 
-                    alt="Archive Cover" 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" 
-                  />
-                  <div className="absolute inset-0 bg-brand-blue/10 group-hover:bg-transparent transition-colors duration-500"></div>
-                </div>
+                {/* Фоновый градиент карточки */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryStyle(fund.category_ru).gradient} opacity-50 dark:opacity-20 pointer-events-none`}></div>
 
-                <div className="flex justify-between items-start mb-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-gold/20 text-brand-dark dark:text-brand-gold">
-                    <FolderOpen className="w-3 h-3 mr-1" />
-                    {fund.code}
-                  </span>
+                <div className="relative z-10 flex justify-between items-start mb-6">
+                  <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 group-hover:scale-110 transition-transform duration-300">
+                    {React.createElement(getCategoryStyle(fund.category_ru).icon, { className: `w-6 h-6 ${getCategoryStyle(fund.category_ru).iconColor}` })}
+                  </div>
                   <div className="flex flex-col items-end gap-2">
-                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{fund.period}</span>
-                    <span className={`text-xs px-2 py-1 rounded-md font-bold
+                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-white/50 dark:bg-slate-800/50 px-2 py-1 rounded-md backdrop-blur-sm">{fund.period}</span>
+                    <span className={`text-xs px-2 py-1 rounded-md font-bold shadow-sm
                       ${fund[`status_${lang}`] === 'Доступен' || fund[`status_${lang}`] === 'Қолжетімді' 
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
-                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400' 
+                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400'}`}
                     >
                       {fund[`status_${lang}`]}
                     </span>
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-brand-blue dark:group-hover:text-brand-cyan transition-colors">
+
+                <div className="relative z-10 mb-4 flex items-center">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/80 dark:bg-slate-700/80 text-slate-700 dark:text-slate-300 shadow-sm backdrop-blur-sm border border-slate-100 dark:border-slate-600">
+                    <FolderOpen className="w-3 h-3 mr-1" />
+                    {fund.code}
+                  </span>
+                </div>
+
+
+                <h3 className="relative z-10 text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-brand-blue dark:group-hover:text-brand-cyan transition-colors">
                   {fund[`title_${lang}`]}
                 </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 flex-grow">
+                <p className="relative z-10 text-sm text-slate-600 dark:text-slate-400 mb-6 flex-grow">
                   {fund[`desc_${lang}`]}
                 </p>
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-700 mt-auto flex justify-between items-center">
-                  <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{fund[`category_${lang}`]}</span>
+                <div className="relative z-10 pt-4 border-t border-slate-200/50 dark:border-slate-700/50 mt-auto flex justify-between items-center">
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{fund[`category_${lang}`]}</span>
                   <button 
                     onClick={(e) => { e.stopPropagation(); setSelectedFund(fund); }}
                     className="text-brand-blue dark:text-brand-cyan text-sm font-bold hover:text-brand-gold transition-colors flex items-center"
