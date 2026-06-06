@@ -154,7 +154,7 @@ export default function ArchiveFunds() {
                   <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{fund[`category_${lang}`]}</span>
                   <button 
                     onClick={(e) => { e.stopPropagation(); setSelectedFund(fund); }}
-                    className="text-brand-blue dark:text-brand-cyan text-sm font-bold hover:text-brand-gold transition-colors flex items-center"
+                    className="text-brand-blue dark:text-brand-cyan text-sm font-bold hover:text-brand-gold transition-colors flex items-center cursor-pointer"
                   >
                     {f.btnDetails}
                     <ArrowRight className="w-4 h-4 ml-1" />
