@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import * as XLSX from 'xlsx';
+import { exportToExcel } from '../utils/exportToExcel';
 import { Search, Download, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 export default function Admin() {
@@ -88,30 +88,16 @@ export default function Admin() {
     return nameMatch || iinMatch;
   });
 
-  const handleExportExcel = () => {
-    const headers = ['ID', 'Дата', 'ФИО', 'ИИН', 'Телефон', 'Email', 'Услуга', 'Запрос', 'Статус'];
-    
-    const rows = filteredRequests.map(req => {
+  const handleExportExcel = async () => {
+    const dataToExport = filteredRequests.map(req => {
       const statusLabel = statuses.find(s => s.value === req.status)?.label || req.status;
-      return [
-        req.id,
-        new Date(req.date).toLocaleDateString('ru-RU'),
-        req.full_name || '',
-        req.iin || '',
-        req.phone || '',
-        req.email || '',
-        req.type || '',
-        req.query || '',
-        statusLabel
-      ];
+      return {
+        ...req,
+        status: statusLabel
+      };
     });
-
-    const worksheetData = [headers, ...rows];
-    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Заявки');
-
-    XLSX.writeFile(workbook, 'zayavki_astana_archive.xlsx', { bookType: 'xlsx', type: 'binary' });
+    
+    await exportToExcel(dataToExport, 'Заявки_Астана_Архив.xlsx');
   };
 
   if (!isAuthenticated) {
