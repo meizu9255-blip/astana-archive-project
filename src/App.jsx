@@ -10,6 +10,7 @@ import Contacts from './pages/Contacts';
 import Status from './pages/Status';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+import UniversalAssistant from './components/UniversalAssistant';
 import { AccessibilityProvider } from './AccessibilityContext';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <UniversalAssistant />
       </div>
     </BrowserRouter>
     </AccessibilityProvider>

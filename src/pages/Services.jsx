@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, Send, CheckCircle, AlertCircle, Paperclip } from 'lucide-react';
-import UniversalAssistant from '../components/UniversalAssistant';
+import { FileText, Send, CheckCircle, AlertCircle, Paperclip, Search, CreditCard, Clock, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 export default function Services() {
@@ -88,9 +87,6 @@ export default function Services() {
           <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">{s.desc}</p>
         </div>
-
-        {/* Интеграция нового Универсального Ассистента */}
-        <UniversalAssistant />
 
         {/* Стандартная форма */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden mt-12 transition-colors duration-300">
