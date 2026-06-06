@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Search, Download, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -8,6 +9,7 @@ export default function Admin() {
   const [authError, setAuthError] = useState('');
 
   const [requests, setRequests] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -71,6 +73,43 @@ export default function Admin() {
     }
   };
 
+  const stats = {
+    received: requests.filter(r => r.status === 'received').length,
+    in_progress: requests.filter(r => r.status === 'in_progress').length,
+    ready: requests.filter(r => r.status === 'ready').length,
+    rejected: requests.filter(r => r.status === 'rejected').length,
+  };
+
+  const filteredRequests = requests.filter(req => {
+    const term = searchTerm.toLowerCase();
+    const nameMatch = req.full_name && req.full_name.toLowerCase().includes(term);
+    const iinMatch = req.iin && req.iin.includes(term);
+    return nameMatch || iinMatch;
+  });
+
+  const handleExportCSV = () => {
+    const headers = ['ID', 'Дата', 'ФИО', 'ИИН', 'Телефон', 'Email', 'Услуга', 'Запрос', 'Статус'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredRequests.map(req => {
+        const statusLabel = statuses.find(s => s.value === req.status)?.label || req.status;
+        const typeEscaped = req.type ? req.type.replace(/"/g, '""') : '';
+        const queryEscaped = req.query ? req.query.replace(/"/g, '""') : '';
+        return `"${req.id}","${new Date(req.date).toLocaleDateString('ru-RU')}","${req.full_name || ''}","${req.iin || ''}","${req.phone || ''}","${req.email || ''}","${typeEscaped}","${queryEscaped}","${statusLabel}"`;
+      })
+    ].join('\n');
+
+    // Add BOM for correct Excel encoding
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `archive_requests_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300 px-4">
@@ -112,6 +151,65 @@ export default function Admin() {
           </button>
         </div>
 
+        {/* Виджеты статистики */}
+        {!isLoading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">На рассмотрении</p>
+                <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{stats.received}</p>
+              </div>
+              <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-full"><FileText className="w-8 h-8 text-yellow-600 dark:text-yellow-400"/></div>
+            </div>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">В работе</p>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.in_progress}</p>
+              </div>
+              <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full"><Clock className="w-8 h-8 text-blue-600 dark:text-blue-400"/></div>
+            </div>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">Готово</p>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.ready}</p>
+              </div>
+              <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-full"><CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400"/></div>
+            </div>
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">Отклонено</p>
+                <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.rejected}</p>
+              </div>
+              <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-full"><XCircle className="w-8 h-8 text-red-600 dark:text-red-400"/></div>
+            </div>
+          </div>
+        )}
+
+        {/* Панель управления (Поиск и Экспорт) */}
+        {!isLoading && !error && (
+          <div className="flex flex-col sm:flex-row justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 mb-6 gap-4">
+            <div className="relative w-full sm:w-96">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Поиск по ФИО или ИИН..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg leading-5 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue dark:focus:ring-brand-cyan transition-colors"
+              />
+            </div>
+            <button
+              onClick={handleExportCSV}
+              className="flex items-center w-full sm:w-auto px-4 py-2 bg-brand-blue text-white font-semibold rounded-lg hover:bg-brand-dark transition-colors"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Экспорт в CSV
+            </button>
+          </div>
+        )}
+
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
           {isLoading ? (
             <div className="p-12 text-center text-slate-500 dark:text-slate-400">Загрузка заявок...</div>
@@ -131,7 +229,7 @@ export default function Admin() {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
-                  {requests.map((req) => (
+                  {filteredRequests.map((req) => (
                     <tr key={req.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-bold text-brand-blue dark:text-brand-cyan">{req.id}</div>
@@ -150,17 +248,17 @@ export default function Admin() {
                         <div className="text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={req.query}>{req.query}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                          ${req.status === 'received' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                            req.status === 'in_progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' :
-                            req.status === 'ready' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border
+                          ${req.status === 'received' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 
+                            req.status === 'in_progress' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                            req.status === 'ready' ? 'bg-green-100 text-green-800 border-green-200' :
+                            'bg-red-100 text-red-800 border-red-200'}`}>
                           {statuses.find(s => s.value === req.status)?.label || req.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center space-x-2">
                         <select
-                          className="border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 focus:outline-none"
+                          className="border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue"
                           defaultValue={req.status}
                           onChange={(e) => updateStatus(req.id, e.target.value)}
                         >
@@ -171,10 +269,13 @@ export default function Admin() {
                       </td>
                     </tr>
                   ))}
-                  {requests.length === 0 && (
+                  {filteredRequests.length === 0 && (
                     <tr>
-                      <td colSpan="6" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
-                        Заявок пока нет.
+                      <td colSpan="6" className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+                        <div className="flex flex-col items-center">
+                          <Search className="w-12 h-12 mb-4 text-slate-300 dark:text-slate-600" />
+                          <p className="text-lg">Заявки не найдены</p>
+                        </div>
                       </td>
                     </tr>
                   )}
