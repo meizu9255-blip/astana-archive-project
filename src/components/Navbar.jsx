@@ -40,7 +40,7 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-brand-blue dark:bg-slate-950 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
+    <nav className="bg-brand-blue dark:bg-slate-950 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300 max-w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
@@ -53,12 +53,12 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-3 lg:gap-6 flex-shrink-0">
+          <div className="hidden xl:flex items-center gap-2 lg:gap-4 xl:gap-6 flex-shrink-0">
             {links.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`transition-colors duration-300 text-[11px] lg:text-sm font-semibold uppercase tracking-wider py-2 whitespace-nowrap
+                className={`transition-colors duration-300 text-xs xl:text-sm font-semibold uppercase tracking-wider py-2 whitespace-nowrap
                   ${isActive(link.path) 
                     ? 'text-brand-gold border-b-2 border-brand-gold' 
                     : 'text-white/90 hover:text-brand-gold'}
@@ -104,7 +104,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="md:hidden flex items-center space-x-4">
+          <div className="xl:hidden flex items-center space-x-4">
             <button 
               onClick={toggleHighContrast}
               className={`text-white/70 hover:text-brand-gold transition focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
@@ -125,7 +125,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className={`xl:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="bg-brand-blue dark:bg-slate-950 border-t border-white/10 px-4 pt-4 pb-6 flex flex-col gap-2 shadow-inner">
           {links.map(link => (
             <Link
