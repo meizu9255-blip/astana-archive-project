@@ -7,6 +7,7 @@ import About from './pages/About';
 import ArchiveFunds from './pages/ArchiveFunds';
 import Services from './pages/Services';
 import Contacts from './pages/Contacts';
+import Status from './pages/Status';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import { AccessibilityProvider } from './AccessibilityContext';
@@ -23,6 +24,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/funds" element={<ArchiveFunds />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/status" element={<Status />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />

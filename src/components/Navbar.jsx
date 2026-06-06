@@ -33,6 +33,7 @@ export default function Navbar() {
     { path: '/about', label: t.nav.about },
     { path: '/funds', label: t.nav.funds },
     { path: '/services', label: t.nav.services },
+    { path: '/status', label: lang === 'ru' ? 'Статус заявки' : 'Өтініш мәртебесі' },
     { path: '/contacts', label: t.nav.contacts },
   ];
 
