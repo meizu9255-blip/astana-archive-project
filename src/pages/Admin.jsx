@@ -15,10 +15,10 @@ export default function Admin() {
   const [error, setError] = useState(null);
 
   const statuses = [
-    { value: 'received', label: 'На рассмотрении' },
-    { value: 'in_progress', label: 'В работе' },
-    { value: 'ready', label: 'Готово' },
-    { value: 'rejected', label: 'Отклонено' }
+    { value: 'Заявка принята', label: 'Заявка принята' },
+    { value: 'В обработке', label: 'В обработке' },
+    { value: 'Готово к выдаче', label: 'Готово к выдаче' },
+    { value: 'Отклонено', label: 'Отклонено' }
   ];
 
   const handleLogin = (e) => {
@@ -57,28 +57,28 @@ export default function Admin() {
     }
   }, [isAuthenticated]);
 
-  const updateStatus = async (id, newStatus) => {
+  const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`/api/admin/requests/${id}`, {
+      // Обновляем состояние (state) моментально, чтобы бейдж изменился сразу
+      setRequests(prev => prev.map(req => req.id === orderId ? { ...req, status: newStatus } : req));
+      
+      const res = await fetch(`/api/admin/requests/${orderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
       });
       if (!res.ok) throw new Error('Ошибка обновления');
       
-      // Обновляем локально
-      setRequests(requests.map(req => req.id === id ? { ...req, status: newStatus } : req));
-      alert('Статус успешно обновлен!');
     } catch (err) {
-      alert('Ошибка при обновлении статуса');
+      alert('Ошибка при сохранении статуса в БД');
     }
   };
 
   const stats = {
-    received: requests.filter(r => r.status === 'received').length,
-    in_progress: requests.filter(r => r.status === 'in_progress').length,
-    ready: requests.filter(r => r.status === 'ready').length,
-    rejected: requests.filter(r => r.status === 'rejected').length,
+    received: requests.filter(r => r.status === 'Заявка принята').length,
+    in_progress: requests.filter(r => r.status === 'В обработке').length,
+    ready: requests.filter(r => r.status === 'Готово к выдаче').length,
+    rejected: requests.filter(r => r.status === 'Отклонено').length,
   };
 
   const filteredRequests = requests.filter(req => {
@@ -239,18 +239,18 @@ export default function Admin() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border
-                          ${req.status === 'received' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 
-                            req.status === 'in_progress' ? 'bg-blue-100 text-blue-800 border-blue-200' :
-                            req.status === 'ready' ? 'bg-green-100 text-green-800 border-green-200' :
+                          ${req.status === 'Заявка принята' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 
+                            req.status === 'В обработке' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                            req.status === 'Готово к выдаче' ? 'bg-green-100 text-green-800 border-green-200' :
                             'bg-red-100 text-red-800 border-red-200'}`}>
-                          {statuses.find(s => s.value === req.status)?.label || req.status}
+                          {req.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center space-x-2">
                         <select
                           className="border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue"
-                          defaultValue={req.status}
-                          onChange={(e) => updateStatus(req.id, e.target.value)}
+                          value={req.status}
+                          onChange={(e) => handleStatusChange(req.id, e.target.value)}
                         >
                           {statuses.map(s => (
                             <option key={s.value} value={s.value}>{s.label}</option>
