@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Landmark, MapPin, Phone, Mail, Camera, MessageCircle, Video } from 'lucide-react';
+import { Landmark, MapPin, Phone, Mail, Globe, Database, Book } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 export default function Footer() {
@@ -53,16 +53,31 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-bold uppercase tracking-wider mb-6">{t.footer.socials}</h3>
-            <div className="flex space-x-4">
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-brand-gold hover:text-brand-dark transition">
-                <Camera className="h-5 w-5" />
+            <h3 className="text-white font-bold uppercase tracking-wider mb-6">{t.footer.resources}</h3>
+            <div className="flex flex-col space-y-4">
+              <a href="https://www.gosarhiv.kz/" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-brand-gold/50">
+                <div className="bg-brand-gold/20 p-2 rounded-lg group-hover:bg-brand-gold transition-colors">
+                  <Globe className="h-5 w-5 text-brand-gold group-hover:text-brand-dark transition-colors" />
+                </div>
+                <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">
+                  {lang === 'ru' ? 'Официальный сайт' : 'Ресми сайт'}
+                </span>
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-brand-gold hover:text-brand-dark transition">
-                <MessageCircle className="h-5 w-5" />
+              <a href="#" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-brand-cyan/50">
+                <div className="bg-brand-blue/20 p-2 rounded-lg group-hover:bg-brand-cyan transition-colors">
+                  <Database className="h-5 w-5 text-brand-cyan group-hover:text-brand-dark transition-colors" />
+                </div>
+                <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">
+                  {lang === 'ru' ? 'Электронный архив акимата' : 'Әкімдіктің электронды архиві'}
+                </span>
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-brand-gold hover:text-brand-dark transition">
-                <Video className="h-5 w-5" />
+              <a href="#" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-white/50">
+                <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white transition-colors">
+                  <Book className="h-5 w-5 text-white/70 group-hover:text-brand-dark transition-colors" />
+                </div>
+                <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">
+                  {lang === 'ru' ? 'Архивный вестник' : 'Архив жаршысы'}
+                </span>
               </a>
             </div>
             <p className="text-xs mt-6 text-white/50">
