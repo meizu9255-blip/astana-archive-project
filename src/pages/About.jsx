@@ -53,13 +53,18 @@ export default function About() {
               </div>
               <ul className="space-y-3 mt-6">
                 {a.documentsArr.map((doc, index) => (
-                  <li key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors rounded-lg cursor-pointer">
+                  <a 
+                    key={index} 
+                    href={doc.file} 
+                    download 
+                    className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors rounded-lg cursor-pointer"
+                  >
                     <div className="flex items-center space-x-3">
                       <FileText className="w-5 h-5 text-slate-400 dark:text-slate-500" />
                       <span className="font-medium text-slate-700 dark:text-slate-200">{doc.name}</span>
                     </div>
                     <Download className="w-5 h-5 text-brand-blue dark:text-brand-cyan" />
-                  </li>
+                  </a>
                 ))}
               </ul>
             </div>
