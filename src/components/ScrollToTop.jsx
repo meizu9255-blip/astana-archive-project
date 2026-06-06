@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ScrollToTop() {
+  const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
+
+  // Auto scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   // Check scroll position
   useEffect(() => {
