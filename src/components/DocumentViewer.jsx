@@ -61,7 +61,7 @@ export default function DocumentViewer() {
               backgroundRepeat: 'no-repeat',
               backgroundSize: `${imgRef.current.getBoundingClientRect().width * ZOOM_LEVEL}px ${imgRef.current.getBoundingClientRect().height * ZOOM_LEVEL}px`,
               backgroundPosition: `-${position.x * ZOOM_LEVEL - MAGNIFIER_SIZE / 2}px -${position.y * ZOOM_LEVEL - MAGNIFIER_SIZE / 2}px`,
-              filter: 'contrast(1.5) grayscale(0.9) brightness(1.4)'
+              filter: 'contrast(1.3) grayscale(0.8) brightness(0.95)'
             }}
           />
         )}
