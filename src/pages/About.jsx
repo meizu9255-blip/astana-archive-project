@@ -1,76 +1,200 @@
 import React from 'react';
-import { Building2, Users, FileText, Download, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import { motion } from 'framer-motion';
+import { Shield, BookOpen, Clock, Users, Database, Server, Smartphone, User, Code, FileSearch } from 'lucide-react';
+
+const stats = [
+  { id: 1, icon: BookOpen, value: '850 000+', label_ru: 'Единиц хранения', label_kz: 'Сақтау бірліктері' },
+  { id: 2, icon: Clock, value: '25+', label_ru: 'Лет истории', label_kz: 'Жыл тарихы' },
+  { id: 3, icon: Users, value: '150 000+', label_ru: 'Обслуженных граждан', label_kz: 'Қызмет көрсетілген азаматтар' }
+];
+
+const team = [
+  { id: 1, name: 'Ерлан Кусаинов', role_ru: 'Директор архива', role_kz: 'Мұрағат директоры', icon: User },
+  { id: 2, name: 'Айгерим Смагулова', role_ru: 'Руководитель экспертного отдела', role_kz: 'Сарапшылар бөлімінің басшысы', icon: FileSearch },
+  { id: 3, name: 'Тимур Ахметов', role_ru: 'Руководитель IT-отдела', role_kz: 'IT-бөлімінің басшысы', icon: Code }
+];
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
 
 export default function About() {
-  const { t } = useLanguage();
-  const a = t.about;
+  const { lang, t } = useLanguage();
 
   return (
-    <div className="py-12 bg-slate-50 dark:bg-slate-900 transition-colors duration-300 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
-        
-        <div className="mb-16 text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{a.title}</h1>
-          <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
-          <p className="text-lg text-slate-600 dark:text-slate-400">{a.desc}</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-20">
-          <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="bg-brand-blue/10 dark:bg-slate-700 p-4 rounded-xl"><Building2 className="text-brand-blue dark:text-brand-cyan w-8 h-8" /></div>
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{a.historyTitle}</h2>
-            </div>
-            <div className="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed">
-              <p>{a.historyText1}</p>
-              <p>{a.historyText2}</p>
-            </div>
+    <div className="bg-slate-50 dark:bg-slate-900 min-h-screen text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300">
+      
+      {/* 1. Наша миссия */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="text-center max-w-4xl mx-auto"
+        >
+          <div className="inline-flex items-center justify-center p-4 bg-brand-blue/10 dark:bg-brand-blue/20 rounded-full mb-6">
+            <Shield className="w-10 h-10 text-brand-blue dark:text-brand-cyan" />
           </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">
+            {lang === 'ru' ? 'Наша миссия' : 'Біздің миссиямыз'}
+          </h1>
+          <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-8"></div>
+          <p className="text-xl leading-relaxed text-slate-600 dark:text-slate-400">
+            {lang === 'ru' 
+              ? 'Мы — хранители исторической памяти Астаны. Наша главная задача — бережно сохранить документальное наследие столицы для будущих поколений, обеспечивая открытый и удобный доступ к истории через современные технологии.'
+              : 'Біз — Астананың тарихи жадының сақтаушыларымыз. Біздің басты міндетіміз — елорданың құжаттық мұрасын болашақ ұрпақ үшін ұқыпты сақтау және заманауи технологиялар арқылы тарихқа ашық әрі ыңғайлы қолжетімділікті қамтамасыз ету.'}
+          </p>
+        </motion.div>
+      </section>
+
+      {/* 2. Архив в цифрах */}
+      <section className="py-20 bg-white dark:bg-slate-800 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              {lang === 'ru' ? 'Архив в цифрах' : 'Мұрағат сандармен'}
+            </h2>
+          </motion.div>
           
-          <div className="grid grid-cols-1 gap-6">
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 group hover:border-brand-gold dark:hover:border-brand-gold transition-colors">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="bg-brand-gold/20 dark:bg-slate-700 p-3 rounded-xl"><Users className="text-brand-dark dark:text-brand-gold w-6 h-6" /></div>
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{a.leadershipTitle}</h2>
-              </div>
-              <ul className="space-y-3 mt-6">
-                {a.leadershipArr.map((person, index) => (
-                  <li key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 rounded-lg transition-colors">
-                    <div>
-                      <p className="font-bold text-slate-800 dark:text-slate-200">{person.name}</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{person.role}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {stats.map(stat => (
+              <motion.div 
+                key={stat.id} 
+                variants={fadeInUp}
+                className="bg-slate-50 dark:bg-slate-700/50 p-8 rounded-2xl text-center border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="w-16 h-16 mx-auto bg-brand-gold/20 flex items-center justify-center rounded-2xl mb-6">
+                  <stat.icon className="w-8 h-8 text-brand-dark dark:text-brand-gold" />
+                </div>
+                <div className="text-4xl font-extrabold text-brand-blue dark:text-brand-cyan mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-lg font-medium text-slate-600 dark:text-slate-300">
+                  {lang === 'ru' ? stat.label_ru : stat.label_kz}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
-            <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 group hover:border-brand-blue dark:hover:border-brand-cyan transition-colors">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="bg-brand-blue/10 dark:bg-slate-700 p-3 rounded-xl"><FileText className="text-brand-blue dark:text-brand-cyan w-6 h-6" /></div>
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{a.documentsTitle}</h2>
+      {/* 3. Технологический вектор */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+        >
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              {lang === 'ru' ? 'Технологический вектор' : 'Технологиялық бағыт'}
+            </h2>
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+              {lang === 'ru' 
+                ? 'Сегодня Государственный архив Астаны уверенно переходит в цифровую эпоху. Мы оцифровываем миллионы страниц, создаем надежные электронные базы данных и автоматизируем выдачу справок, интегрируясь с государственными порталами.'
+                : 'Бүгінде Астананың мемлекеттік архиві цифрлық дәуірге сенімді қадам басуда. Біз миллиондаған беттерді цифрландырып, сенімді электронды деректер базасын құрудамыз және мемлекеттік порталдармен біріге отырып, анықтамалар беруді автоматтандырамыз.'}
+            </p>
+            <div className="space-y-6">
+              <div className="flex items-start">
+                <Database className="w-8 h-8 text-brand-blue dark:text-brand-cyan mr-4 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-xl mb-1">{lang === 'ru' ? 'Электронные базы' : 'Электронды базалар'}</h4>
+                  <p className="text-slate-500 dark:text-slate-400">{lang === 'ru' ? 'Безопасное облачное хранение отсканированных фондов.' : 'Сканерленген қорлардың қауіпсіз бұлттық қоймасы.'}</p>
+                </div>
               </div>
-              <ul className="space-y-3 mt-6">
-                {a.documentsArr.map((doc, index) => (
-                  <a 
-                    key={index} 
-                    href={doc.file} 
-                    download 
-                    className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors rounded-lg cursor-pointer"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <FileText className="w-5 h-5 text-slate-400 dark:text-slate-500" />
-                      <span className="font-medium text-slate-700 dark:text-slate-200">{doc.name}</span>
-                    </div>
-                    <Download className="w-5 h-5 text-brand-blue dark:text-brand-cyan" />
-                  </a>
-                ))}
-              </ul>
+              <div className="flex items-start">
+                <Server className="w-8 h-8 text-brand-blue dark:text-brand-cyan mr-4 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-xl mb-1">{lang === 'ru' ? 'Автоматизация' : 'Автоматтандыру'}</h4>
+                  <p className="text-slate-500 dark:text-slate-400">{lang === 'ru' ? 'Мгновенный поиск документов с помощью алгоритмов.' : 'Алгоритмдер арқылы құжаттарды лезде іздеу.'}</p>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <Smartphone className="w-8 h-8 text-brand-blue dark:text-brand-cyan mr-4 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-xl mb-1">{lang === 'ru' ? 'Интеграция' : 'Интеграция'}</h4>
+                  <p className="text-slate-500 dark:text-slate-400">{lang === 'ru' ? 'Доступ к архивным услугам прямо со смартфона.' : 'Мұрағат қызметтеріне смартфоннан тікелей қол жеткізу.'}</p>
+                </div>
+              </div>
             </div>
           </div>
+          <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-brand-blue/20 to-brand-cyan/20 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80')] opacity-30 bg-cover bg-center mix-blend-overlay"></div>
+             <Server className="w-40 h-40 text-brand-blue dark:text-brand-cyan relative z-10 drop-shadow-2xl opacity-80" />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* 4. Наша команда */}
+      <section className="py-20 bg-slate-100 dark:bg-slate-800/50 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              {lang === 'ru' ? 'Наша команда' : 'Біздің команда'}
+            </h2>
+            <div className="w-16 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
+          </motion.div>
+
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-10"
+          >
+            {team.map(member => (
+              <motion.div 
+                key={member.id} 
+                variants={fadeInUp}
+                className="bg-white dark:bg-slate-700 p-8 rounded-2xl text-center border border-slate-200 dark:border-slate-600 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+              >
+                <div className="w-24 h-24 mx-auto bg-slate-100 dark:bg-slate-600 rounded-full flex items-center justify-center mb-6 overflow-hidden border-4 border-slate-50 dark:border-slate-800 shadow-inner">
+                  {/* Заглушка фотографии (плейсхолдер) */}
+                  <member.icon className="w-10 h-10 text-slate-400 dark:text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">{member.name}</h3>
+                <p className="text-brand-blue dark:text-brand-cyan font-medium">
+                  {lang === 'ru' ? member.role_ru : member.role_kz}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </div>
+      </section>
+
     </div>
   );
 }
