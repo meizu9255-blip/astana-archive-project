@@ -63,7 +63,7 @@ export default function Footer() {
                   {lang === 'ru' ? 'Официальный сайт' : 'Ресми сайт'}
                 </span>
               </a>
-              <a href="#" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-brand-cyan/50">
+              <a href="https://www.gosarhiv.kz/publikatsii/astana-alasynda-biry-aj-elektrondy-arkhiv-rylady" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-brand-cyan/50">
                 <div className="bg-brand-blue/20 p-2 rounded-lg group-hover:bg-brand-cyan transition-colors">
                   <Database className="h-5 w-5 text-brand-cyan group-hover:text-brand-dark transition-colors" />
                 </div>
@@ -71,7 +71,7 @@ export default function Footer() {
                   {lang === 'ru' ? 'Электронный архив акимата' : 'Әкімдіктің электронды архиві'}
                 </span>
               </a>
-              <a href="#" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-white/50">
+              <a href="http://www.gosarhiv.kz/ru/vestnik-arkhiva" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 group bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-all border border-white/10 hover:border-white/50">
                 <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white transition-colors">
                   <Book className="h-5 w-5 text-white/70 group-hover:text-brand-dark transition-colors" />
                 </div>
