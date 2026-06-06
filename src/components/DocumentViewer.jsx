@@ -10,7 +10,7 @@ export default function DocumentViewer() {
   const imgRef = useRef(null);
 
   // Изображение старой рукописи
-  const imageUrl = "https://images.unsplash.com/photo-1590844288001-f2f63f53835c?q=80&w=2000&auto=format&fit=crop";
+  const imageUrl = "/manuscript.jpg";
   const MAGNIFIER_SIZE = 250;
   const ZOOM_LEVEL = 2;
 
@@ -46,7 +46,7 @@ export default function DocumentViewer() {
         <img 
           src={imageUrl} 
           alt="Old manuscript" 
-          className="w-full h-auto object-cover opacity-80 mix-blend-multiply rounded-lg pointer-events-none"
+          className="w-full max-w-4xl h-96 object-cover mx-auto rounded-lg shadow-lg opacity-90 mix-blend-multiply pointer-events-none"
         />
 
         {showMagnifier && imgRef.current && (
