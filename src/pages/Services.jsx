@@ -30,13 +30,15 @@ export default function Services() {
   const [file, setFile] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [postError, setPostError] = useState('');
+  const [generatedId, setGeneratedId] = useState('');
 
   const onSubmit = async (data) => {
     setPostError('');
     try {
+      const newId = `REQ-${Math.floor(Math.random() * 9000) + 1000}`;
       const orderData = {
         ...data,
-        id: `AST-2026-${Math.floor(Math.random() * 9000) + 1000}`,
+        id: newId,
         date: new Date().toISOString(),
         status: 'Заявка принята'
       };
@@ -49,6 +51,7 @@ export default function Services() {
 
       if (!res.ok) throw new Error('Server error');
 
+      setGeneratedId(newId);
       setShowSuccess(true);
       reset();
       setFile(null);
@@ -200,7 +203,7 @@ export default function Services() {
             <h3 className="text-2xl font-extrabold text-slate-800 mb-2">{s.successTitle}</h3>
             <p className="text-slate-600 mb-6">
               {s.successNum} <br/>
-              <span className="text-brand-blue font-bold text-lg inline-block mt-2 px-4 py-1 bg-brand-blue/10 rounded-lg">AST-2026-{(Math.floor(Math.random() * 9000) + 1000)}</span>
+              <span className="text-brand-blue font-bold text-lg inline-block mt-2 px-4 py-1 bg-brand-blue/10 rounded-lg">{generatedId}</span>
             </p>
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-sm text-amber-800 text-left">
               <strong>{s.successWarning}</strong>
