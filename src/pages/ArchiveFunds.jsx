@@ -123,7 +123,16 @@ export default function ArchiveFunds() {
                     <FolderOpen className="w-3 h-3 mr-1" />
                     {fund.code}
                   </span>
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{fund.period}</span>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{fund.period}</span>
+                    <span className={`text-xs px-2 py-1 rounded-md font-bold
+                      ${fund[`status_${lang}`] === 'Доступен' || fund[`status_${lang}`] === 'Қолжетімді' 
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                        : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}
+                    >
+                      {fund[`status_${lang}`]}
+                    </span>
+                  </div>
                 </div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-brand-blue dark:group-hover:text-brand-cyan transition-colors">
                   {fund[`title_${lang}`]}
@@ -135,9 +144,10 @@ export default function ArchiveFunds() {
                   <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{fund[`category_${lang}`]}</span>
                   <button 
                     onClick={(e) => { e.stopPropagation(); setSelectedFund(fund); }}
-                    className="text-brand-blue dark:text-brand-cyan text-sm font-bold hover:text-brand-gold transition-colors"
+                    className="text-brand-blue dark:text-brand-cyan text-sm font-bold hover:text-brand-gold transition-colors flex items-center"
                   >
                     {f.btnDetails}
+                    <ArrowRight className="w-4 h-4 ml-1" />
                   </button>
                 </div>
               </div>
