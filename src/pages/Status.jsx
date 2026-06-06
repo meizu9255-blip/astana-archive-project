@@ -22,21 +22,21 @@ export default function Status() {
     setStatusResult(null);
 
     try {
-      const res = await fetch('/api/admin/requests');
-      if (!res.ok) throw new Error('Network response was not ok');
+      const res = await fetch(`/api/status?id=${reqId.trim()}`);
+      if (!res.ok) {
+        if (res.status === 404) {
+          setError(true);
+          return;
+        }
+        throw new Error('Network response was not ok');
+      }
       const data = await res.json();
       
-      const foundOrder = data.find(req => req.id.toLowerCase() === reqId.trim().toLowerCase());
-      
-      if (foundOrder) {
-        setStatusResult({
-          id: foundOrder.id,
-          date: new Date(foundOrder.date).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'kk-KZ'),
-          dbStatus: foundOrder.status
-        });
-      } else {
-        setError(true);
-      }
+      setStatusResult({
+        id: data.id,
+        date: new Date(data.date).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'kk-KZ'),
+        dbStatus: data.status
+      });
     } catch (err) {
       console.error(err);
       setError(true);

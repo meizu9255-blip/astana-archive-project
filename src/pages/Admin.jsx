@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { exportToExcel } from '../utils/exportToExcel';
-import { Search, Download, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Search, Download, FileText, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react';
 import Skeleton from '../components/Skeleton';
 
 export default function Admin() {
@@ -14,6 +14,8 @@ export default function Admin() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [toastError, setToastError] = useState('');
+  const [updatingId, setUpdatingId] = useState(null);
 
   const statuses = [
     { value: 'Заявка принята', label: 'Заявка принята' },
@@ -59,6 +61,8 @@ export default function Admin() {
   }, [isAuthenticated]);
 
   const handleStatusChange = async (orderId, newStatus) => {
+    setUpdatingId(orderId);
+    setToastError('');
     try {
       // Обновляем состояние (state) моментально, чтобы бейдж изменился сразу
       setRequests(prev => prev.map(req => req.id === orderId ? { ...req, status: newStatus } : req));
@@ -71,7 +75,10 @@ export default function Admin() {
       if (!res.ok) throw new Error('Ошибка обновления');
       
     } catch (err) {
-      alert('Ошибка при сохранении статуса в БД');
+      setToastError('Ошибка при сохранении статуса в БД');
+      setTimeout(() => setToastError(''), 5000);
+    } finally {
+      setUpdatingId(null);
     }
   };
 
@@ -177,6 +184,13 @@ export default function Admin() {
         )}
 
         {/* Панель управления (Поиск и Экспорт) */}
+        {toastError && (
+          <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-400 rounded-lg shadow-sm animate-fade-in-up flex items-center">
+            <AlertCircle className="w-5 h-5 mr-3" />
+            <span className="font-semibold">{toastError}</span>
+          </div>
+        )}
+
         {!isLoading && !error && (
           <div className="flex flex-col sm:flex-row justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 mb-6 gap-4">
             <div className="relative w-full sm:w-96">
@@ -188,7 +202,8 @@ export default function Admin() {
                 placeholder="Поиск по ФИО или ИИН..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg leading-5 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue dark:focus:ring-brand-cyan transition-colors"
+                disabled={isLoading || updatingId !== null}
+                className="block w-full pl-10 pr-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg leading-5 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue dark:focus:ring-brand-cyan transition-colors disabled:opacity-60"
               />
             </div>
             <button
@@ -258,8 +273,9 @@ export default function Admin() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center space-x-2">
                         <select
-                          className="border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                          className="border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                           value={req.status}
+                          disabled={isLoading || updatingId === req.id}
                           onChange={(e) => handleStatusChange(req.id, e.target.value)}
                         >
                           {statuses.map(s => (
