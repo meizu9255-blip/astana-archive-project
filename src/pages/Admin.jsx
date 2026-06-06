@@ -89,22 +89,30 @@ export default function Admin() {
 
   const handleExportCSV = () => {
     const headers = ['ID', 'Дата', 'ФИО', 'ИИН', 'Телефон', 'Email', 'Услуга', 'Запрос', 'Статус'];
-    const csvContent = [
-      headers.join(','),
-      ...filteredRequests.map(req => {
-        const statusLabel = statuses.find(s => s.value === req.status)?.label || req.status;
-        const typeEscaped = req.type ? req.type.replace(/"/g, '""') : '';
-        const queryEscaped = req.query ? req.query.replace(/"/g, '""') : '';
-        return `"${req.id}","${new Date(req.date).toLocaleDateString('ru-RU')}","${req.full_name || ''}","${req.iin || ''}","${req.phone || ''}","${req.email || ''}","${typeEscaped}","${queryEscaped}","${statusLabel}"`;
-      })
-    ].join('\n');
+    
+    const rows = filteredRequests.map(req => {
+      const statusLabel = statuses.find(s => s.value === req.status)?.label || req.status;
+      const typeEscaped = req.type ? req.type.replace(/"/g, '""') : '';
+      const queryEscaped = req.query ? req.query.replace(/"/g, '""') : '';
+      return [
+        `"${req.id}"`,
+        `"${new Date(req.date).toLocaleDateString('ru-RU')}"`,
+        `"${req.full_name || ''}"`,
+        `"${req.iin || ''}"`,
+        `"${req.phone || ''}"`,
+        `"${req.email || ''}"`,
+        `"${typeEscaped}"`,
+        `"${queryEscaped}"`,
+        `"${statusLabel}"`
+      ];
+    });
 
-    // Add BOM for correct Excel encoding
-    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvContent = "\uFEFF" + [headers.map(h => `"${h}"`), ...rows].map(e => e.join(";")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `archive_requests_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', 'zayavki_astana_archive.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
