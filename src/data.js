@@ -149,8 +149,8 @@ export const siteContent = {
         { name: 'Ахметова Алия Маратовна', role: 'Заместитель директора' }
       ],
       documentsArr: [
-        { name: 'Устав Государственного архива', file: '/ustav.pdf' },
-        { name: 'Правила работы читального зала', file: '/pravila.pdf' }
+        { name: 'Устав Государственного архива', file: '/ustav_astana_archive.pdf' },
+        { name: 'Правила работы читального зала', file: '/pravila_chitalnogo_zala.pdf' }
       ]
     },
     services: {
@@ -359,8 +359,8 @@ export const siteContent = {
         { name: 'Ахметова Алия Маратовна', role: 'Директордың орынбасары' }
       ],
       documentsArr: [
-        { name: 'Мемлекеттік мұрағат жарғысы', file: '/ustav.pdf' },
-        { name: 'Оқу залының жұмыс ережелері', file: '/pravila.pdf' }
+        { name: 'Мемлекеттік мұрағат жарғысы', file: '/ustav_astana_archive.pdf' },
+        { name: 'Оқу залының жұмыс ережелері', file: '/pravila_chitalnogo_zala.pdf' }
       ]
     },
     services: {
