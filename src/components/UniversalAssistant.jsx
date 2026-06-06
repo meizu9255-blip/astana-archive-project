@@ -97,7 +97,7 @@ export default function UniversalAssistant() {
       }
 
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `Ты — официальный виртуальный помощник Государственного архива города Астаны. Отвечай вежливо, официально, на языке пользователя. Если спрашивают про адрес, отвечай: ул. Ауэзова, 3. Отвечай кратко и по делу. Вопрос пользователя: ${userMsgText}`;
 
