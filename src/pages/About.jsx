@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLanguage } from '../LanguageContext';
 import { motion } from 'framer-motion';
-import { Shield, BookOpen, Clock, Users, Database, Server, Smartphone, User, Code, FileSearch, FileText } from 'lucide-react';
+import { Shield, BookOpen, Clock, Users, Database, Server, Smartphone, User, Code, FileSearch, FileText, Award, ChevronRight, Search } from 'lucide-react';
+import PdfModal from '../components/PdfModal';
 
 const stats = [
   { id: 1, icon: BookOpen, value: '850 000+', label_ru: 'Единиц хранения', label_kz: 'Сақтау бірліктері' },
@@ -33,6 +34,13 @@ const staggerContainer = {
 
 export default function About() {
   const { lang, t } = useLanguage();
+  const [isPdfModalOpen, setIsPdfModalOpen] = React.useState(false);
+  const [currentPdf, setCurrentPdf] = React.useState({ url: '', title: '' });
+
+  const openPdf = (url, title) => {
+    setCurrentPdf({ url, title });
+    setIsPdfModalOpen(true);
+  };
 
   return (
     <div className="bg-slate-50 dark:bg-slate-900 min-h-screen text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300">
@@ -194,6 +202,59 @@ export default function About() {
           </motion.div>
         </div>
       </section>
+
+      {/* 5. Документы и отчеты */}
+      <section className="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            className="text-center mb-16"
+          >
+            <h2 className="text-2xl md:text-4xl font-bold mb-4">
+              {t.about.documentsTitle}
+            </h2>
+            <div className="w-16 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
+          </motion.div>
+
+          <div className="flex flex-col gap-4">
+            {t.about.documentsArr?.map((doc, index) => (
+              <motion.button 
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                onClick={() => openPdf(doc.file, doc.name)}
+                className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl transition-all duration-300 group text-left"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-brand-blue/10 dark:bg-slate-700 rounded-xl group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300">
+                    <FileText className="w-6 h-6 text-brand-blue dark:text-brand-cyan group-hover:text-white" />
+                  </div>
+                  <span className="text-lg font-semibold text-slate-800 dark:text-slate-100 group-hover:text-brand-blue dark:group-hover:text-brand-cyan transition-colors">
+                    {doc.name}
+                  </span>
+                </div>
+                <div className="text-brand-blue dark:text-brand-cyan font-medium hidden sm:flex items-center">
+                  <span>{lang === 'ru' ? 'Смотреть' : 'Қарау'}</span>
+                  <ChevronRight className="w-5 h-5 ml-1" />
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pdf Modal */}
+      <PdfModal 
+        isOpen={isPdfModalOpen} 
+        onClose={() => setIsPdfModalOpen(false)} 
+        pdfUrl={currentPdf.url} 
+        title={currentPdf.title} 
+      />
 
     </div>
   );
