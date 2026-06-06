@@ -11,6 +11,7 @@ import Status from './pages/Status';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import UniversalAssistant from './components/UniversalAssistant';
+import ScrollToTop from './components/ScrollToTop';
 import { AccessibilityProvider } from './AccessibilityContext';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         </main>
         <Footer />
         <UniversalAssistant />
+        <ScrollToTop />
       </div>
     </BrowserRouter>
     </AccessibilityProvider>
