@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, User, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../LanguageContext';
@@ -6,6 +6,9 @@ import { useLanguage } from '../LanguageContext';
 export default function UniversalAssistant() {
   const { lang } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const messagesEndRef = useRef(null);
+
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -15,6 +18,16 @@ export default function UniversalAssistant() {
         : 'Сәлеметсіз бе! Мен сіздің Архив көмекшіңізбін. Қалай көмектесе аламын?'
     }
   ]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
   const faqs = [
     {
@@ -41,7 +54,6 @@ export default function UniversalAssistant() {
   ];
 
   const handleAsk = (faq) => {
-    // Add user question
     const userMsg = {
       id: Date.now(),
       sender: 'user',
@@ -50,7 +62,6 @@ export default function UniversalAssistant() {
     
     setMessages(prev => [...prev, userMsg]);
 
-    // Simulate assistant thinking
     setTimeout(() => {
       const assistantMsg = {
         id: Date.now() + 1,
@@ -59,6 +70,37 @@ export default function UniversalAssistant() {
       };
       setMessages(prev => [...prev, assistantMsg]);
     }, 600);
+  };
+
+  const handleSend = () => {
+    if (!inputText.trim()) return;
+
+    const userMsg = {
+      id: Date.now(),
+      sender: 'user',
+      text: inputText.trim()
+    };
+    
+    setMessages(prev => [...prev, userMsg]);
+    setInputText('');
+
+    setTimeout(() => {
+      const assistantMsg = {
+        id: Date.now() + 1,
+        sender: 'assistant',
+        text: lang === 'ru' 
+          ? 'Спасибо за ваш вопрос! Наш специалист проверит архивные данные и свяжется с вами.' 
+          : 'Сұрағыңызға рақмет! Біздің маман мұрағат деректерін тексеріп, сізбен байланысады.'
+      };
+      setMessages(prev => [...prev, assistantMsg]);
+    }, 1200);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
@@ -111,24 +153,45 @@ export default function UniversalAssistant() {
                   </div>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* FAQ Buttons Area */}
             <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 font-semibold uppercase tracking-wider">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 font-semibold uppercase tracking-wider">
                 {lang === 'ru' ? 'Частые вопросы:' : 'Жиі қойылатын сұрақтар:'}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mb-3">
                 {faqs.map(faq => (
                   <button 
                     key={faq.id}
                     onClick={() => handleAsk(faq)}
-                    className="text-xs text-left bg-slate-100 dark:bg-slate-800 hover:bg-brand-blue hover:text-white dark:hover:bg-brand-cyan dark:hover:text-slate-900 text-slate-700 dark:text-slate-300 py-2 px-3 rounded-xl transition-colors duration-200"
+                    className="text-xs text-left bg-slate-100 dark:bg-slate-800 hover:bg-brand-blue hover:text-white dark:hover:bg-brand-cyan dark:hover:text-slate-900 text-slate-700 dark:text-slate-300 py-1.5 px-3 rounded-xl transition-colors duration-200"
                   >
                     {lang === 'ru' ? faq.q_ru : faq.q_kz}
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Input Area */}
+            <div className="p-3 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <input 
+                type="text"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={lang === 'ru' ? 'Введите ваш вопрос...' : 'Сұрағыңызды енгізіңіз...'}
+                className="flex-1 bg-slate-100 dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-100 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-blue dark:focus:ring-brand-cyan transition-shadow border border-transparent focus:border-transparent"
+              />
+              <button 
+                onClick={handleSend}
+                disabled={!inputText.trim()}
+                className="bg-brand-blue hover:bg-blue-800 text-white p-2.5 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                aria-label="Send message"
+              >
+                <Send className="w-4 h-4" />
+              </button>
             </div>
             
           </motion.div>
