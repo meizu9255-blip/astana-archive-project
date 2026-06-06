@@ -1,13 +1,62 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle, Navigation } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+function MapController({ center }) {
+  const map = useMap();
+  React.useEffect(() => {
+    if (center) {
+      map.flyTo(center, 15, { duration: 1.5 });
+    }
+  }, [center, map]);
+  return null;
+}
 
 export default function Contacts() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const c = t.contacts;
 
   const [form, setForm] = useState({ name: '', message: '' });
   const [isSent, setIsSent] = useState(false);
+  const [activeCenter, setActiveCenter] = useState([51.1466, 71.4465]); // Default middle Astana
+
+  const branches = [
+    { 
+      id: 1, 
+      name: lang === 'ru' ? 'Головной офис' : 'Бас кеңсе', 
+      address: 'г. Астана, ул. М. Әуезова, 3', 
+      coords: [51.1732, 71.4285], 
+      phone: '+7 (7172) 28-07-41' 
+    },
+    { 
+      id: 2, 
+      name: lang === 'ru' ? 'Служба комплектования' : 'Жинақтау қызметі', 
+      address: 'г. Астана, ул. С. Сейфуллина, 56/2', 
+      coords: [51.1705, 71.4190], 
+      phone: '+7 (7172) 28-07-42' 
+    },
+    { 
+      id: 3, 
+      name: lang === 'ru' ? 'Служба научно-исследовательской работы' : 'Ғылыми-зерттеу жұмысы қызметі', 
+      address: 'г. Астана, ул. Калдаякова, 13', 
+      coords: [51.1195, 71.4642], 
+      phone: '+7 (7172) 28-07-43' 
+    },
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,13 +85,6 @@ export default function Contacts() {
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-8">{c.infoTitle}</h2>
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <div className="bg-brand-blue/10 dark:bg-slate-700 p-3 rounded-xl shrink-0"><MapPin className="text-brand-blue dark:text-brand-cyan w-6 h-6" /></div>
-                <div>
-                  <h4 className="font-bold text-slate-800 dark:text-slate-200">{c.addressLabel}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 mt-1">{c.addressVal}</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4">
                 <div className="bg-brand-blue/10 dark:bg-slate-700 p-3 rounded-xl shrink-0"><Phone className="text-brand-blue dark:text-brand-cyan w-6 h-6" /></div>
                 <div>
                   <h4 className="font-bold text-slate-800 dark:text-slate-200">{c.phoneLabel}</h4>
@@ -61,26 +103,6 @@ export default function Contacts() {
                 <div>
                   <h4 className="font-bold text-slate-800 dark:text-slate-200">{c.scheduleLabel}</h4>
                   <p className="text-slate-600 dark:text-slate-400 mt-1">{c.scheduleVal}</p>
-                </div>
-              </div>
-
-              <div className="pt-6 border-t border-slate-200 dark:border-slate-700 mt-6">
-                <h4 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">{c.branchesTitle}</h4>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <MapPin className="text-brand-gold w-5 h-5 shrink-0 mt-0.5" />
-                    <div>
-                      <span className="block font-semibold text-slate-700 dark:text-slate-300">{c.branch1Label}</span>
-                      <span className="text-sm text-slate-500 dark:text-slate-400">{c.branch1Val}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <MapPin className="text-brand-gold w-5 h-5 shrink-0 mt-0.5" />
-                    <div>
-                      <span className="block font-semibold text-slate-700 dark:text-slate-300">{c.branch2Label}</span>
-                      <span className="text-sm text-slate-500 dark:text-slate-400">{c.branch2Val}</span>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -136,19 +158,57 @@ export default function Contacts() {
 
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors">
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 p-4">{c.mapTitle}</h2>
-          <div className="w-full h-[400px] rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-700">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10023.275466827725!2d71.4285434!3d51.130635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4245869389975765%3A0xcb1b593eb423d242!2z0JPQvtGB0YPQtNCw0YDRgdGC0LLQtdC90L3Ri9C5INCw0YDRhdC40LIg0LMuINCQ0YHRgtCw0L3Riw!5e0!3m2!1sru!2skz!4v1700000000000!5m2!1sru!2skz" 
-              width="100%" 
-              height="100%" 
-              style={{ border: 0 }} 
-              allowFullScreen="" 
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
+        {/* Интерактивная карта и список филиалов */}
+        <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-8">{c.mapTitle}</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-1 space-y-4">
+              {branches.map(branch => (
+                <div key={branch.id} className="p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:border-brand-blue dark:hover:border-brand-cyan transition-colors">
+                  <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg mb-1">{branch.name}</h3>
+                  <div className="flex items-start text-slate-600 dark:text-slate-400 text-sm mt-2">
+                    <MapPin className="w-4 h-4 mr-2 shrink-0 mt-0.5 text-brand-gold" />
+                    <span>{branch.address}</span>
+                  </div>
+                  <div className="flex items-center text-slate-600 dark:text-slate-400 text-sm mt-1 mb-4">
+                    <Phone className="w-4 h-4 mr-2 shrink-0 text-brand-gold" />
+                    <span>{branch.phone}</span>
+                  </div>
+                  <button 
+                    onClick={() => setActiveCenter(branch.coords)}
+                    className="w-full flex justify-center items-center py-2 px-4 rounded-lg bg-white dark:bg-slate-800 text-brand-blue dark:text-brand-cyan border border-slate-200 dark:border-slate-600 hover:bg-brand-blue hover:text-white dark:hover:bg-brand-cyan dark:hover:text-slate-900 transition-colors text-sm font-semibold shadow-sm"
+                  >
+                    <Navigation className="w-4 h-4 mr-2" />
+                    {lang === 'ru' ? 'Показать на карте' : 'Картадан көрсету'}
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            <div className="lg:col-span-2 h-[500px] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-inner z-0">
+              <MapContainer center={activeCenter} zoom={12} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                />
+                <MapController center={activeCenter} />
+                {branches.map(branch => (
+                  <Marker key={branch.id} position={branch.coords}>
+                    <Popup>
+                      <div className="text-center">
+                        <strong className="block text-slate-800 text-base">{branch.name}</strong>
+                        <span className="text-slate-600 text-sm">{branch.address}</span>
+                        <br />
+                        <span className="text-brand-blue font-bold">{branch.phone}</span>
+                      </div>
+                    </Popup>
+                  </Marker>
+                ))}
+              </MapContainer>
+            </div>
           </div>
+
         </div>
 
       </div>
