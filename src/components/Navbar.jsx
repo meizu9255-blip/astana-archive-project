@@ -44,11 +44,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3 group">
+            <Link to="/" className="flex items-center gap-3 group">
               <Landmark className="h-9 w-9 text-brand-gold group-hover:scale-105 transition-transform" />
-              <div className="flex flex-col">
-                <span className="font-bold text-lg leading-tight uppercase tracking-wide">{t.nav.archiveShort}</span>
-                <span className="text-xs text-brand-gold uppercase tracking-wider">{t.nav.archive}</span>
+              <div className="flex flex-col text-left justify-center">
+                <span className="text-sm md:text-base font-bold text-white leading-tight uppercase">Астана қаласының Мемлекеттік архиві</span>
+                <span className="text-xs md:text-sm text-yellow-500 whitespace-nowrap leading-tight uppercase">Государственный архив г. Астаны</span>
               </div>
             </Link>
           </div>

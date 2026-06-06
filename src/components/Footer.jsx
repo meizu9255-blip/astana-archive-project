@@ -12,11 +12,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           
           <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-3 text-white mb-6">
-              <Landmark className="h-10 w-10 text-brand-gold" />
-              <div className="flex flex-col">
-                <span className="font-bold text-lg leading-tight uppercase">{t.nav.archiveShort}</span>
-                <span className="text-xs text-brand-gold uppercase tracking-wider">{t.nav.archive.replace('Государственный архив', '').replace('Астана қаласының мемлекеттік архиві', 'Астана қаласының')}</span>
+            <Link to="/" className="flex items-center gap-3 group text-white mb-6">
+              <Landmark className="h-10 w-10 text-brand-gold group-hover:scale-105 transition-transform" />
+              <div className="flex flex-col text-left justify-center">
+                <span className="text-sm md:text-base font-bold text-white leading-tight uppercase">Астана қаласының Мемлекеттік архиві</span>
+                <span className="text-xs md:text-sm text-yellow-500 whitespace-nowrap leading-tight uppercase">Государственный архив г. Астаны</span>
               </div>
             </Link>
             <p className="text-sm leading-relaxed">
