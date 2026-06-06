@@ -10,7 +10,7 @@ export default function Status() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleCheck = (e) => {
+  const handleCheck = async (e) => {
     e.preventDefault();
     if (!reqId.trim()) {
       setError(true);
@@ -21,21 +21,50 @@ export default function Status() {
     setIsLoading(true);
     setStatusResult(null);
 
-    // Mock delay
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/admin/requests');
+      if (!res.ok) throw new Error('Network response was not ok');
+      const data = await res.json();
+      
+      const foundOrder = data.find(req => req.id.toLowerCase() === reqId.trim().toLowerCase());
+      
+      if (foundOrder) {
+        setStatusResult({
+          id: foundOrder.id,
+          date: new Date(foundOrder.date).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'kk-KZ'),
+          dbStatus: foundOrder.status
+        });
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
       setIsLoading(false);
-      setStatusResult({
-        id: reqId.toUpperCase(),
-        date: new Date().toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'kk-KZ'),
-      });
-    }, 800);
+    }
+  };
+
+  const currentDbStatus = statusResult ? statusResult.dbStatus : '';
+  
+  const getStepStatus = (stepIndex) => {
+    if (!currentDbStatus) return 'pending';
+    let dbIndex = 0;
+    if (currentDbStatus === 'Заявка принята') dbIndex = 0;
+    else if (currentDbStatus === 'В обработке') dbIndex = 1;
+    else if (currentDbStatus === 'Готово к выдаче') dbIndex = 2;
+    else return 'pending'; // например 'Отклонено'
+
+    if (stepIndex < dbIndex) return 'done';
+    if (stepIndex === dbIndex) return 'current';
+    return 'pending';
   };
 
   const steps = [
     {
       id: 1,
       title: lang === 'ru' ? 'Заявка принята' : 'Өтініш қабылданды',
-      status: 'done', // done, current, pending
+      status: getStepStatus(0),
       icon: CheckCircle2,
       color: 'text-green-600 dark:text-green-400',
       bg: 'bg-green-100 dark:bg-green-900/50',
@@ -44,7 +73,7 @@ export default function Status() {
     {
       id: 2,
       title: lang === 'ru' ? 'В обработке' : 'Өңделуде',
-      status: 'current',
+      status: getStepStatus(1),
       icon: Clock,
       color: 'text-brand-gold',
       bg: 'bg-yellow-100 dark:bg-yellow-900/50',
@@ -53,13 +82,15 @@ export default function Status() {
     {
       id: 3,
       title: lang === 'ru' ? 'Готово к выдаче' : 'Беруге дайын',
-      status: 'pending',
+      status: getStepStatus(2),
       icon: FileText,
       color: 'text-slate-400 dark:text-slate-500',
       bg: 'bg-slate-100 dark:bg-slate-800',
       border: 'border-slate-300 dark:border-slate-600',
     }
   ];
+
+  const activeLineClass = currentDbStatus === 'Готово к выдаче' ? 'w-full' : currentDbStatus === 'В обработке' ? 'w-1/2' : 'w-0';
 
   const t = {
     title: lang === 'ru' ? 'Статус заявки' : 'Өтініш мәртебесі',
@@ -142,7 +173,7 @@ export default function Status() {
               <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 dark:bg-slate-700 -translate-y-1/2 rounded-full z-0"></div>
               
               {/* Активная линия (до текущего шага) */}
-              <div className="hidden md:block absolute top-1/2 left-0 w-1/2 h-1 bg-brand-gold -translate-y-1/2 rounded-full z-0"></div>
+              <div className={`hidden md:block absolute top-1/2 left-0 h-1 bg-brand-gold -translate-y-1/2 rounded-full z-0 transition-all duration-700 ${activeLineClass}`}></div>
 
               <div className="flex flex-col md:flex-row justify-between relative z-10 gap-8 md:gap-0">
                 {steps.map((step, index) => (
