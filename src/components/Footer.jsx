@@ -4,7 +4,7 @@ import { Landmark, MapPin, Phone, Mail, Globe, Database, Book } from 'lucide-rea
 import { useLanguage } from '../LanguageContext';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
 
   return (
     <footer className="bg-brand-dark text-white/80 pt-16 pb-8 border-t-[4px] border-brand-gold mt-auto">
