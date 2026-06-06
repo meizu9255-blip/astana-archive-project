@@ -90,8 +90,12 @@ export default function Footer() {
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs gap-4 md:gap-0 text-center md:text-left">
           <p>&copy; {new Date().getFullYear()} {t.footer.rights}</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="#" className="hover:text-brand-gold transition">{t.footer.privacy}</Link>
-            <Link to="#" className="hover:text-brand-gold transition">{t.footer.sitemap}</Link>
+            <Link to="/privacy" className="hover:text-brand-gold transition">
+              {lang === 'ru' ? 'Политика конфиденциальности' : 'Құпиялылық саясаты'}
+            </Link>
+            <Link to="/contacts" className="hover:text-brand-gold transition">
+              {lang === 'ru' ? 'Карта архивов' : 'Архивтер картасы'}
+            </Link>
           </div>
         </div>
       </div>

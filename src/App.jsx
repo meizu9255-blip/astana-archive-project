@@ -10,6 +10,7 @@ import Contacts from './pages/Contacts';
 import Status from './pages/Status';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import UniversalAssistant from './components/UniversalAssistant';
 import ScrollToTop from './components/ScrollToTop';
 import { AccessibilityProvider } from './AccessibilityContext';
@@ -30,6 +31,7 @@ function App() {
             <Route path="/status" element={<Status />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
