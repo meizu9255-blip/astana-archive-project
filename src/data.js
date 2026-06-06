@@ -1,3 +1,7 @@
+import astanaImg from './assets/astana.jpg';
+import manuscriptImg from './assets/manuscript.jpg';
+import sovietImg from './assets/soviet.jpg';
+
 export const fundsData = [
   { 
     id: 1, 
@@ -10,7 +14,8 @@ export const fundsData = [
     desc_ru: 'Документы о социально-экономическом развитии города Акмолинска.',
     desc_kz: 'Ақмола қаласының әлеуметтік-экономикалық дамуы туралы құжаттар.',
     status_ru: 'Доступен',
-    status_kz: 'Қолжетімді'
+    status_kz: 'Қолжетімді',
+    image: sovietImg
   },
   { 
     id: 2, 
@@ -23,7 +28,8 @@ export const fundsData = [
     desc_ru: 'Генеральный план застройки левобережья, указы, постановления.',
     desc_kz: 'Сол жағалауды салудың бас жоспары, жарлықтар, қаулылар.',
     status_ru: 'На оцифровке',
-    status_kz: 'Цифрландыруда'
+    status_kz: 'Цифрландыруда',
+    image: astanaImg
   },
   { 
     id: 3, 
@@ -36,7 +42,8 @@ export const fundsData = [
     desc_ru: 'Записи о рождении, браке и смерти жителей Акмолинского уезда.',
     desc_kz: 'Ақмола уезі тұрғындарының туу, неке және қайтыс болу туралы жазбалары.',
     status_ru: 'Доступен',
-    status_kz: 'Қолжетімді'
+    status_kz: 'Қолжетімді',
+    image: manuscriptImg
   },
   { 
     id: 4, 
@@ -49,7 +56,8 @@ export const fundsData = [
     desc_ru: 'Цветные негативы и фотографии с торжественных мероприятий.',
     desc_kz: 'Салтанатты іс-шаралардың түрлі-түсті негативтері мен фотосуреттері.',
     status_ru: 'Доступен',
-    status_kz: 'Қолжетімді'
+    status_kz: 'Қолжетімді',
+    image: astanaImg
   },
   { 
     id: 5, 
@@ -62,7 +70,8 @@ export const fundsData = [
     desc_ru: 'Рукописи, письма, личные фотографии писателя.',
     desc_kz: 'Жазушының қолжазбалары, хаттары, жеке фотосуреттері.',
     status_ru: 'На оцифровке',
-    status_kz: 'Цифрландыруда'
+    status_kz: 'Цифрландыруда',
+    image: manuscriptImg
   },
   { 
     id: 6, 
@@ -75,7 +84,8 @@ export const fundsData = [
     desc_ru: 'Архитектурные проекты, чертежи правительственного квартала.',
     desc_kz: 'Үкіметтік тоқсанның сәулеттік жобалары, сызбалары.',
     status_ru: 'Доступен',
-    status_kz: 'Қолжетімді'
+    status_kz: 'Қолжетімді',
+    image: sovietImg
   }
 ];
 

@@ -111,7 +111,7 @@ export default function ArchiveFunds() {
                 {/* Изображение с эффектом scale */}
                 <div className="relative h-40 mb-5 overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-700">
                   <img 
-                    src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=400" 
+                    src={fund.image} 
                     alt="Archive Cover" 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" 
                   />
