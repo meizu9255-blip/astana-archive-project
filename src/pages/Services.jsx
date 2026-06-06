@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { FileText, Send, CheckCircle, AlertCircle, Paperclip, Search, CreditCard, Clock, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
@@ -6,75 +9,51 @@ export default function Services() {
   const { t } = useLanguage();
   const s = t.services;
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    iin: '',
-    email: '',
-    phone: '',
-    type: '',
-    query: '',
-    file: null
+  const schema = useMemo(() => z.object({
+    fullName: z.string().min(2, s.errors.fio),
+    iin: z.string().regex(/^\d{12}$/, s.errors.iin),
+    email: z.string().email(s.errors.email),
+    phone: z.string().min(5, s.errors.phone),
+    type: z.string().min(1, s.errors.type),
+    query: z.string().min(5, s.errors.query),
+  }), [s.errors]);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm({
+    resolver: zodResolver(schema),
   });
 
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [file, setFile] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [postError, setPostError] = useState('');
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.fullName.trim()) newErrors.fullName = s.errors.fio;
-    if (!/^\d{12}$/.test(formData.iin)) newErrors.iin = s.errors.iin;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = s.errors.email;
-    if (!formData.phone.trim()) newErrors.phone = s.errors.phone;
-    if (!formData.type) newErrors.type = s.errors.type;
-    if (!formData.query.trim()) newErrors.query = s.errors.query;
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const onSubmit = async (data) => {
+    setPostError('');
+    try {
+      const orderData = {
+        ...data,
+        id: `AST-2026-${Math.floor(Math.random() * 9000) + 1000}`,
+        date: new Date().toISOString(),
+        status: 'Заявка принята'
+      };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setIsSubmitting(true);
-      setPostError('');
-      try {
-        const orderData = {
-          fullName: formData.fullName,
-          iin: formData.iin,
-          email: formData.email,
-          phone: formData.phone,
-          type: formData.type,
-          query: formData.query,
-          id: `AST-2026-${Math.floor(Math.random() * 9000) + 1000}`,
-          date: new Date().toISOString(),
-          status: 'received'
-        };
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
 
-        const res = await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderData)
-        });
+      if (!res.ok) throw new Error('Server error');
 
-        if (!res.ok) throw new Error('Server error');
-
-        setShowSuccess(true);
-        setFormData({ fullName: '', iin: '', email: '', phone: '', type: '', query: '', file: null });
-      } catch (err) {
-        setPostError(s.postError);
-      } finally {
-        setIsSubmitting(false);
-      }
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
+      setShowSuccess(true);
+      reset();
+      setFile(null);
+    } catch (err) {
+      setPostError(s.postError);
     }
   };
 
@@ -98,60 +77,52 @@ export default function Services() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-8 space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.fioLabel}</label>
                 <input
                   type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
+                  {...register("fullName")}
                   placeholder={s.fioPlaceholder}
                   className={`w-full px-4 py-3 rounded-xl border ${errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.fullName && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.fullName}</p>}
+                {errors.fullName && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.fullName.message}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.iinLabel}</label>
                 <input
                   type="text"
-                  name="iin"
-                  value={formData.iin}
-                  onChange={handleChange}
+                  {...register("iin")}
                   maxLength="12"
                   placeholder={s.iinPlaceholder}
                   className={`w-full px-4 py-3 rounded-xl border ${errors.iin ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.iin && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.iin}</p>}
+                {errors.iin && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.iin.message}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.emailLabel}</label>
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  {...register("email")}
                   placeholder={s.emailPlaceholder}
                   className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.email}</p>}
+                {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.email.message}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.phoneLabel}</label>
                 <input
                   type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
+                  {...register("phone")}
                   placeholder={s.phonePlaceholder}
                   className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.phone && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.phone}</p>}
+                {errors.phone && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.phone.message}</p>}
               </div>
 
             </div>
@@ -159,9 +130,7 @@ export default function Services() {
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.typeLabel}</label>
               <select
-                name="type"
-                value={formData.type}
-                onChange={handleChange}
+                {...register("type")}
                 className={`w-full px-4 py-3 rounded-xl border ${errors.type ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
               >
                 <option value="">{s.errors.type}</option>
@@ -169,20 +138,18 @@ export default function Services() {
                   <option key={i} value={opt.value}>{opt.label}</option>
                 ))}
               </select>
-              {errors.type && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.type}</p>}
+              {errors.type && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.type.message}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.queryLabel}</label>
               <textarea
-                name="query"
-                value={formData.query}
-                onChange={handleChange}
+                {...register("query")}
                 rows="4"
                 placeholder={s.queryPlaceholder}
                 className={`w-full px-4 py-3 rounded-xl border ${errors.query ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 resize-none transition-colors`}
               ></textarea>
-              {errors.query && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.query}</p>}
+              {errors.query && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.query.message}</p>}
             </div>
 
             <div>
@@ -194,10 +161,10 @@ export default function Services() {
                     <p className="mb-2 text-sm text-slate-500 dark:text-slate-400"><span className="font-semibold">{s.fileHint1}</span></p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">{s.fileHint2}</p>
                   </div>
-                  <input type="file" className="hidden" onChange={(e) => setFormData({...formData, file: e.target.files[0]})} />
+                  <input type="file" className="hidden" onChange={(e) => setFile(e.target.files[0])} />
                 </label>
               </div>
-              {formData.file && <p className="mt-2 text-sm text-brand-blue dark:text-brand-cyan font-semibold flex items-center"><CheckCircle className="w-4 h-4 mr-1"/> {s.fileAttached} {formData.file.name}</p>}
+              {file && <p className="mt-2 text-sm text-brand-blue dark:text-brand-cyan font-semibold flex items-center"><CheckCircle className="w-4 h-4 mr-1"/> {s.fileAttached} {file.name}</p>}
             </div>
 
             <div className="pt-4 border-t border-slate-100">

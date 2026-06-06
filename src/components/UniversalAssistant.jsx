@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../LanguageContext';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export default function UniversalAssistant() {
   const { lang } = useLanguage();
@@ -91,28 +90,26 @@ export default function UniversalAssistant() {
     setIsTyping(true);
 
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error('API key is not configured');
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsgText })
+      });
+
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
       }
 
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
-      const prompt = `Ты — официальный виртуальный помощник Государственного архива города Астаны. Отвечай вежливо, официально, на языке пользователя. Если спрашивают про адрес, отвечай: ул. Ауэзова, 3. Отвечай кратко и по делу. Вопрос пользователя: ${userMsgText}`;
-
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const data = await res.json();
 
       const assistantMsg = {
         id: Date.now() + 1,
         sender: 'assistant',
-        text: text
+        text: data.reply
       };
       setMessages(prev => [...prev, assistantMsg]);
     } catch (error) {
-      console.error("Gemini API Error:", error);
+      console.error("Chat API Error:", error);
       const errorMsg = {
         id: Date.now() + 1,
         sender: 'assistant',

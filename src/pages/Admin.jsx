@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { exportToExcel } from '../utils/exportToExcel';
 import { Search, Download, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
+import Skeleton from '../components/Skeleton';
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -62,10 +63,10 @@ export default function Admin() {
       // Обновляем состояние (state) моментально, чтобы бейдж изменился сразу
       setRequests(prev => prev.map(req => req.id === orderId ? { ...req, status: newStatus } : req));
       
-      const res = await fetch(`/api/admin/requests/${orderId}`, {
-        method: 'PUT',
+      const res = await fetch(`/api/admin/requests`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ id: orderId, status: newStatus })
       });
       if (!res.ok) throw new Error('Ошибка обновления');
       
@@ -202,7 +203,16 @@ export default function Admin() {
 
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
           {isLoading ? (
-            <div className="p-12 text-center text-slate-500 dark:text-slate-400">Загрузка заявок...</div>
+            <div className="p-6 space-y-4">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div key={i} className="flex gap-4 items-center">
+                  <Skeleton className="h-12 w-24" />
+                  <Skeleton className="h-12 flex-1" />
+                  <Skeleton className="h-12 w-32" />
+                  <Skeleton className="h-12 w-24" />
+                </div>
+              ))}
+            </div>
           ) : error ? (
             <div className="p-12 text-center text-red-500">{error}</div>
           ) : (
