@@ -60,4 +60,32 @@ app.get('/api/orders', async (req, res) => {
   res.json([]);
 });
 
+// GET /api/admin/requests
+app.get('/api/admin/requests', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM orders ORDER BY date DESC');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching all orders for admin:', err);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// PUT /api/admin/requests/:id
+app.put('/api/admin/requests/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  try {
+    const { rows } = await pool.query(
+      'UPDATE orders SET status = $1 WHERE id = $2 RETURNING *',
+      [status, id]
+    );
+    if (rows.length === 0) return res.status(404).json({ error: 'Заявка не найдена' });
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Error updating order status:', err);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
 export default app;

@@ -173,7 +173,6 @@ export default function Services() {
                   <option key={i} value={opt.value}>{opt.label}</option>
                 ))}
               </select>
-              </select>
               {errors.type && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.type}</p>}
             </div>
 
