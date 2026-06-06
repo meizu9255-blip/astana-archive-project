@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, FolderOpen, AlertCircle, X, ArrowRight, BookOpen, Building2, Camera, FileText } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
-import DocumentViewer from '../components/DocumentViewer';
+import Timeline from '../components/Timeline';
 
 export default function ArchiveFunds() {
   const { lang, t } = useLanguage();
@@ -232,9 +232,9 @@ export default function ArchiveFunds() {
         </div>
       )}
 
-      {/* Цифровой реставратор */}
+      {/* Историческая лента (Timeline) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <DocumentViewer />
+        <Timeline />
       </div>
     </div>
   );
