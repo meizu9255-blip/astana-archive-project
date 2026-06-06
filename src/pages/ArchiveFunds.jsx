@@ -46,17 +46,17 @@ export default function ArchiveFunds() {
   });
 
   return (
-    <div className="py-12 bg-slate-50 min-h-screen relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-12 bg-slate-50 dark:bg-slate-900 min-h-screen relative transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
         
         <div className="mb-10 text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl font-extrabold text-slate-800 mb-4">{f.title}</h1>
+          <h1 className="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{f.title}</h1>
           <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
-          <p className="text-lg text-slate-600">{f.desc}</p>
+          <p className="text-lg text-slate-600 dark:text-slate-400">{f.desc}</p>
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-8 transition-colors duration-300">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             
             {/* Search Input */}
@@ -69,7 +69,7 @@ export default function ArchiveFunds() {
                 placeholder={f.searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-11 pr-4 py-3 border border-slate-300 rounded-xl focus:ring-brand-blue focus:border-brand-blue sm:text-sm bg-slate-50 outline-none transition-colors"
+                className="block w-full pl-11 pr-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-brand-blue focus:border-brand-blue sm:text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 outline-none transition-colors"
               />
             </div>
 
@@ -82,7 +82,7 @@ export default function ArchiveFunds() {
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors
                     ${activeCategoryIndex === index 
                       ? 'bg-brand-blue text-white shadow-md' 
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}
                   `}
                 >
                   {cat}
@@ -99,32 +99,43 @@ export default function ArchiveFunds() {
             <p className="text-lg font-bold text-slate-600">{f.loading}</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 p-8 rounded-2xl border border-red-200 text-center">
+          <div className="bg-red-50 dark:bg-red-900/20 p-8 rounded-2xl border border-red-200 dark:border-red-800 text-center">
             <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-red-700 mb-2">{error}</h3>
+            <h3 className="text-xl font-bold text-red-700 dark:text-red-400 mb-2">{error}</h3>
           </div>
         ) : filteredFunds.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredFunds.map(fund => (
-              <div key={fund.id} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group flex flex-col h-full">
+              <div key={fund.id} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group flex flex-col h-full">
+                
+                {/* Изображение с эффектом scale */}
+                <div className="relative h-40 mb-5 overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-700">
+                  <img 
+                    src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=400" 
+                    alt="Archive Cover" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" 
+                  />
+                  <div className="absolute inset-0 bg-brand-blue/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                </div>
+
                 <div className="flex justify-between items-start mb-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-gold/20 text-brand-dark">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-gold/20 text-brand-dark dark:text-brand-gold">
                     <FolderOpen className="w-3 h-3 mr-1" />
                     {fund.code}
                   </span>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{fund.period}</span>
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{fund.period}</span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2 group-hover:text-brand-blue transition-colors">
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-brand-blue dark:group-hover:text-brand-cyan transition-colors">
                   {fund[`title_${lang}`]}
                 </h3>
-                <p className="text-sm text-slate-600 mb-6 flex-grow">
+                <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 flex-grow">
                   {fund[`desc_${lang}`]}
                 </p>
-                <div className="pt-4 border-t border-slate-100 mt-auto flex justify-between items-center">
-                  <span className="text-xs font-medium text-slate-400">{fund[`category_${lang}`]}</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-700 mt-auto flex justify-between items-center">
+                  <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{fund[`category_${lang}`]}</span>
                   <button 
-                    onClick={() => setSelectedFund(fund)}
-                    className="text-brand-blue text-sm font-bold hover:text-brand-gold transition-colors"
+                    onClick={(e) => { e.stopPropagation(); setSelectedFund(fund); }}
+                    className="text-brand-blue dark:text-brand-cyan text-sm font-bold hover:text-brand-gold transition-colors"
                   >
                     {f.btnDetails}
                   </button>

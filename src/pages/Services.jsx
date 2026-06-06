@@ -80,21 +80,21 @@ export default function Services() {
   };
 
   return (
-    <div className="py-12 bg-slate-50 min-h-screen relative">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-12 bg-slate-50 dark:bg-slate-900 min-h-screen relative transition-colors duration-300">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
         
         <div className="mb-10 text-center">
-          <h1 className="text-4xl font-extrabold text-slate-800 mb-4">{s.title}</h1>
+          <h1 className="text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{s.title}</h1>
           <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full mb-6"></div>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">{s.desc}</p>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">{s.desc}</p>
         </div>
 
         {/* Интеграция нового Универсального Ассистента */}
         <UniversalAssistant />
 
         {/* Стандартная форма */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden mt-12">
-          <div className="bg-brand-blue p-6 text-white flex items-center space-x-3">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden mt-12 transition-colors duration-300">
+          <div className="bg-brand-blue dark:bg-slate-950 p-6 text-white flex items-center space-x-3">
             <FileText className="h-8 w-8 text-brand-gold" />
             <div>
               <h2 className="text-xl font-bold">{s.formTitle}</h2>
@@ -106,20 +106,20 @@ export default function Services() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">{s.fioLabel}</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.fioLabel}</label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder={s.fioPlaceholder}
-                  className={`w-full px-4 py-3 rounded-xl border ${errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50`}
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.fullName && <p className="mt-1 text-xs text-red-500 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.fullName}</p>}
+                {errors.fullName && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.fullName}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">{s.iinLabel}</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.iinLabel}</label>
                 <input
                   type="text"
                   name="iin"
@@ -127,81 +127,82 @@ export default function Services() {
                   onChange={handleChange}
                   maxLength="12"
                   placeholder={s.iinPlaceholder}
-                  className={`w-full px-4 py-3 rounded-xl border ${errors.iin ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50`}
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.iin ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.iin && <p className="mt-1 text-xs text-red-500 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.iin}</p>}
+                {errors.iin && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.iin}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">{s.emailLabel}</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.emailLabel}</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={s.emailPlaceholder}
-                  className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50`}
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.email && <p className="mt-1 text-xs text-red-500 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.email}</p>}
+                {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.email}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">{s.phoneLabel}</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.phoneLabel}</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder={s.phonePlaceholder}
-                  className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50`}
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
                 />
-                {errors.phone && <p className="mt-1 text-xs text-red-500 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.phone}</p>}
+                {errors.phone && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.phone}</p>}
               </div>
 
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">{s.typeLabel}</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.typeLabel}</label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 rounded-xl border ${errors.type ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50`}
+                className={`w-full px-4 py-3 rounded-xl border ${errors.type ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors`}
               >
                 <option value="">{s.errors.type}</option>
                 {s.typeOptions.map((opt, i) => (
                   <option key={i} value={opt.value}>{opt.label}</option>
                 ))}
               </select>
-              {errors.type && <p className="mt-1 text-xs text-red-500 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.type}</p>}
+              </select>
+              {errors.type && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.type}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">{s.queryLabel}</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.queryLabel}</label>
               <textarea
                 name="query"
                 value={formData.query}
                 onChange={handleChange}
                 rows="4"
                 placeholder={s.queryPlaceholder}
-                className={`w-full px-4 py-3 rounded-xl border ${errors.query ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 resize-none`}
+                className={`w-full px-4 py-3 rounded-xl border ${errors.query ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue'} focus:outline-none focus:ring-2 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 resize-none transition-colors`}
               ></textarea>
-              {errors.query && <p className="mt-1 text-xs text-red-500 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.query}</p>}
+              {errors.query && <p className="mt-1 text-xs text-red-500 dark:text-red-400 flex items-center"><AlertCircle className="w-3 h-3 mr-1"/>{errors.query}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">{s.fileLabel}</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{s.fileLabel}</label>
               <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 dark:border-slate-600 border-dashed rounded-xl cursor-pointer bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Paperclip className="w-8 h-8 mb-3 text-slate-400" />
-                    <p className="mb-2 text-sm text-slate-500"><span className="font-semibold">{s.fileHint1}</span></p>
-                    <p className="text-xs text-slate-500">{s.fileHint2}</p>
+                    <Paperclip className="w-8 h-8 mb-3 text-slate-400 dark:text-slate-500" />
+                    <p className="mb-2 text-sm text-slate-500 dark:text-slate-400"><span className="font-semibold">{s.fileHint1}</span></p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{s.fileHint2}</p>
                   </div>
                   <input type="file" className="hidden" onChange={(e) => setFormData({...formData, file: e.target.files[0]})} />
                 </label>
               </div>
-              {formData.file && <p className="mt-2 text-sm text-brand-blue font-semibold flex items-center"><CheckCircle className="w-4 h-4 mr-1"/> {s.fileAttached} {formData.file.name}</p>}
+              {formData.file && <p className="mt-2 text-sm text-brand-blue dark:text-brand-cyan font-semibold flex items-center"><CheckCircle className="w-4 h-4 mr-1"/> {s.fileAttached} {formData.file.name}</p>}
             </div>
 
             <div className="pt-4 border-t border-slate-100">

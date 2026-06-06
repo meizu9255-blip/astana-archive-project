@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, Landmark } from 'lucide-react';
+import { Menu, X, Globe, Landmark, Moon, Sun } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { lang, toggleLanguage, t } = useLanguage();
+
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
 
   const links = [
     { path: '/', label: t.nav.home },
@@ -19,7 +33,7 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-brand-blue text-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-brand-blue dark:bg-slate-950 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
@@ -47,6 +61,15 @@ export default function Navbar() {
               </Link>
             ))}
             
+            {/* Dark Mode Toggle */}
+            <button 
+              onClick={() => setDarkMode(!darkMode)}
+              className="text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none"
+              title="Toggle Dark Mode"
+            >
+              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+
             {/* Переключатель языков Desktop */}
             <div className="flex items-center space-x-2 border-l border-white/20 pl-6 ml-2">
               <Globe className="h-4 w-4 text-white/70 mr-1" />
@@ -65,7 +88,13 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-4">
+            <button 
+              onClick={() => setDarkMode(!darkMode)}
+              className="text-white/70 hover:text-brand-gold transition focus:outline-none"
+            >
+              {darkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+            </button>
             <button onClick={() => setIsOpen(!isOpen)} className="text-white hover:text-brand-gold transition">
               {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
             </button>
@@ -75,7 +104,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="bg-brand-blue border-t border-white/10 px-4 pt-2 pb-4 space-y-1 shadow-inner">
+        <div className="bg-brand-blue dark:bg-slate-950 border-t border-white/10 px-4 pt-2 pb-4 space-y-1 shadow-inner">
           {links.map(link => (
             <Link
               key={link.path}

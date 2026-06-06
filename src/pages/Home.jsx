@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Archive, FileText, Clock, Users, ArrowRight, Search, FileSearch, BookOpen } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
@@ -21,6 +21,20 @@ export default function Home() {
     { icon: BookOpen, title: t.home.servicesArr[2].title, desc: t.home.servicesArr[2].desc, link: "/about" },
   ];
 
+  const [typedTitle, setTypedTitle] = useState('');
+  const fullTitle = t.home.title;
+
+  useEffect(() => {
+    let i = 0;
+    setTypedTitle('');
+    const interval = setInterval(() => {
+      setTypedTitle(fullTitle.substring(0, i));
+      i++;
+      if (i > fullTitle.length) clearInterval(interval);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [fullTitle]);
+
   return (
     <div className="flex flex-col min-h-screen">
       
@@ -32,10 +46,10 @@ export default function Home() {
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-gold to-transparent"></div>
         </div>
         
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-              {t.home.title} <br/><span className="text-brand-gold">{t.home.subtitle}</span>
+              {typedTitle}<span className="animate-pulse">|</span> <br/><span className="text-brand-gold">{t.home.subtitle}</span>
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl leading-relaxed">
               {t.home.desc}
@@ -53,37 +67,37 @@ export default function Home() {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-16 bg-white relative z-30 -mt-10 mx-4 sm:mx-6 lg:mx-8 rounded-2xl shadow-xl max-w-7xl lg:mx-auto">
+      <section className="py-16 bg-white dark:bg-slate-800 relative z-30 -mt-10 mx-4 sm:mx-6 lg:mx-8 rounded-2xl shadow-xl max-w-7xl lg:mx-auto transition-colors duration-300">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8">
           {stats.map((stat, index) => (
             <div key={index} className="flex flex-col items-center text-center p-4 group">
-              <div className="bg-brand-light p-4 rounded-full mb-4 group-hover:bg-brand-gold/10 transition-colors">
-                <stat.icon className="h-8 w-8 text-brand-blue group-hover:text-brand-gold transition-colors" />
+              <div className="bg-brand-light dark:bg-slate-700 p-4 rounded-full mb-4 group-hover:bg-brand-gold/10 transition-colors">
+                <stat.icon className="h-8 w-8 text-brand-blue dark:text-brand-cyan group-hover:text-brand-gold transition-colors" />
               </div>
-              <h3 className="text-3xl font-extrabold text-slate-800 mb-2">{stat.count}</h3>
-              <p className="text-slate-500 font-medium">{stat.label}</p>
+              <h3 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 mb-2">{stat.count}</h3>
+              <p className="text-slate-500 dark:text-slate-400 font-medium">{stat.label}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Popular Services Section */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">{t.home.popularServices}</h2>
+            <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">{t.home.popularServices}</h2>
             <div className="w-24 h-1 bg-brand-gold mx-auto rounded-full"></div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div key={index} className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-slate-100 group">
-                <div className="bg-brand-blue/5 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition-colors">
-                  <service.icon className="h-8 w-8 text-brand-blue group-hover:text-white transition-colors" />
+              <div key={index} className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-slate-100 dark:border-slate-700 group">
+                <div className="bg-brand-blue/5 dark:bg-slate-700 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition-colors">
+                  <service.icon className="h-8 w-8 text-brand-blue dark:text-brand-cyan group-hover:text-white transition-colors" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-3">{service.title}</h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">{service.desc}</p>
-                <Link to={service.link} className="inline-flex items-center text-brand-blue font-bold hover:text-brand-gold transition-colors">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3">{service.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">{service.desc}</p>
+                <Link to={service.link} className="inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold dark:hover:text-brand-gold transition-colors">
                   {t.home.readMore} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </div>
@@ -93,29 +107,29 @@ export default function Home() {
       </section>
 
       {/* Latest News Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">{t.home.latestNews}</h2>
+              <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">{t.home.latestNews}</h2>
               <div className="w-24 h-1 bg-brand-gold rounded-full"></div>
             </div>
-            <Link to="/about" className="hidden sm:inline-flex items-center text-brand-blue font-bold hover:text-brand-gold transition-colors">
+            <Link to="/about" className="hidden sm:inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold transition-colors">
               {t.home.allNews} <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {news.map((item) => (
-              <div key={item.id} className="bg-slate-50 rounded-2xl p-8 hover:bg-brand-blue hover:text-white transition-colors group cursor-pointer border border-slate-100">
+              <div key={item.id} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-8 hover:bg-brand-blue dark:hover:bg-brand-blue transition-colors group cursor-pointer border border-slate-100 dark:border-slate-700">
                 <div className="text-sm font-bold text-brand-gold mb-3">{item.date}</div>
-                <h3 className="text-lg font-bold text-slate-800 group-hover:text-white mb-3 line-clamp-2">
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-white mb-3 line-clamp-2">
                   {item.title}
                 </h3>
-                <p className="text-slate-600 group-hover:text-white/80 mb-6 line-clamp-3">
+                <p className="text-slate-600 dark:text-slate-400 group-hover:text-white/80 mb-6 line-clamp-3">
                   {item.description}
                 </p>
-                <button className="inline-flex items-center text-sm font-bold text-brand-blue group-hover:text-brand-gold transition-colors">
+                <button className="inline-flex items-center text-sm font-bold text-brand-blue dark:text-brand-cyan group-hover:text-brand-gold transition-colors">
                   {t.home.readMore} <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
               </div>
