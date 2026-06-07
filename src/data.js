@@ -279,6 +279,33 @@ export const siteContent = {
       rights: 'Государственный архив города Астаны. Все права защищены.',
       privacy: 'Политика конфиденциальности',
       sitemap: 'Карта сайта'
+    },
+    admin: {
+      loginTitle: 'Вход в Панель управления',
+      loginDesc: 'Введите пароль администратора',
+      passwordPlaceholder: 'Пароль',
+      btnLogin: 'Войти',
+      title: 'Панель управления',
+      btnLogout: 'Выйти',
+      statReceived: 'На рассмотрении',
+      statInProgress: 'В работе',
+      statReady: 'Готово',
+      statRejected: 'Отклонено',
+      searchPlaceholder: 'Поиск по ФИО или ИИН...',
+      btnExport: 'Экспорт в Excel',
+      colIdDate: 'ID / Дата',
+      colFioIin: 'ФИО / ИИН',
+      colContacts: 'Контакты',
+      colService: 'Услуга',
+      colStatus: 'Статус',
+      colAction: 'Действие',
+      notFound: 'Заявки не найдены',
+      errorServer: 'Ошибка сервера',
+      errorLoad: 'Не удалось загрузить заявки',
+      errorUpdate: 'Ошибка обновления',
+      errorDbSave: 'Ошибка при сохранении статуса в БД. Сервер недоступен.',
+      errorWrongPass: 'Неверный пароль',
+      errorConnect: 'Ошибка подключения к серверу'
     }
   },
   kz: {
@@ -498,6 +525,33 @@ export const siteContent = {
       rights: 'Астана қаласының мемлекеттік архиві. Барлық құқықтар қорғалған.',
       privacy: 'Құпиялылық саясаты',
       sitemap: 'Сайт картасы'
+    },
+    admin: {
+      loginTitle: 'Басқару тақтасына кіру',
+      loginDesc: 'Әкімші құпия сөзін енгізіңіз',
+      passwordPlaceholder: 'Құпия сөз',
+      btnLogin: 'Кіру',
+      title: 'Басқару тақтасы',
+      btnLogout: 'Шығу',
+      statReceived: 'Қаралуда',
+      statInProgress: 'Жұмыста',
+      statReady: 'Дайын',
+      statRejected: 'Қабылданбады',
+      searchPlaceholder: 'Аты-жөні немесе ЖСН бойынша іздеу...',
+      btnExport: 'Excel-ге экспорттау',
+      colIdDate: 'ID / Күні',
+      colFioIin: 'Аты-жөні / ЖСН',
+      colContacts: 'Байланыс',
+      colService: 'Қызмет',
+      colStatus: 'Мәртебесі',
+      colAction: 'Әрекет',
+      notFound: 'Өтінімдер табылмады',
+      errorServer: 'Сервер қатесі',
+      errorLoad: 'Өтінімдерді жүктеу мүмкін болмады',
+      errorUpdate: 'Жаңарту қатесі',
+      errorDbSave: 'Мәртебені ДҚ-ға сақтау қатесі. Сервер қолжетімсіз.',
+      errorWrongPass: 'Құпия сөз қате',
+      errorConnect: 'Серверге қосылу қатесі'
     }
   }
 };
