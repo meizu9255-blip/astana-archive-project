@@ -265,7 +265,7 @@ export default function Admin() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{req.full_name}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">ИИН: {req.iin}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400">{lang === 'ru' ? 'ИИН' : 'ЖСН'}: {req.iin}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-slate-800 dark:text-slate-200">{req.phone}</div>

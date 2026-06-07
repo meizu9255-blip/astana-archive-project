@@ -10,15 +10,26 @@ export default function UniversalAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const initialMsgRu = 'Здравствуйте! Я ваш Архивный помощник. Чем могу помочь?';
+  const initialMsgKz = 'Сәлеметсіз бе! Мен сіздің Архив көмекшіңізбін. Қалай көмектесе аламын?';
+
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'assistant',
-      text: lang === 'ru' 
-        ? 'Здравствуйте! Я ваш Архивный помощник. Чем могу помочь?' 
-        : 'Сәлеметсіз бе! Мен сіздің Архив көмекшіңізбін. Қалай көмектесе аламын?'
+      text: lang === 'ru' ? initialMsgRu : initialMsgKz
     }
   ]);
+
+  // Обновляем текст приветствия при переключении языка
+  useEffect(() => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === 1) {
+        return { ...msg, text: lang === 'ru' ? initialMsgRu : initialMsgKz };
+      }
+      return msg;
+    }));
+  }, [lang]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -72,7 +72,7 @@ export default function Navbar() {
             <button 
               onClick={toggleHighContrast}
               className={`text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
-              title="Режим для слабовидящих"
+              title={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
             >
               {isHighContrast ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
@@ -81,7 +81,7 @@ export default function Navbar() {
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className="text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none"
-              title="Toggle Dark Mode"
+              title={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
             >
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
