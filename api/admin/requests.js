@@ -37,6 +37,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing id or status' });
     }
 
+    const validStatuses = ['Заявка принята', 'В обработке', 'Готово к выдаче', 'Отклонено'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+
     try {
       const { rows } = await pool.query(
         'UPDATE orders SET status = $1 WHERE id = $2 RETURNING *',

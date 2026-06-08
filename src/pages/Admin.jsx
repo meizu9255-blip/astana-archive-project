@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { exportToExcel } from '../utils/exportToExcel';
 import { Search, Download, FileText, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react';
 import Skeleton from '../components/Skeleton';
@@ -12,6 +12,7 @@ export default function Admin() {
   });
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   const [requests, setRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,6 +31,7 @@ export default function Admin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError('');
+    setIsAuthLoading(true);
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
@@ -45,6 +47,8 @@ export default function Admin() {
       }
     } catch (err) {
       setAuthError(a.errorConnect);
+    } finally {
+      setIsAuthLoading(false);
     }
   };
 
@@ -95,19 +99,21 @@ export default function Admin() {
     }
   };
 
-  const stats = {
+  const stats = useMemo(() => ({
     received: requests.filter(r => r.status === 'Заявка принята').length,
     in_progress: requests.filter(r => r.status === 'В обработке').length,
     ready: requests.filter(r => r.status === 'Готово к выдаче').length,
     rejected: requests.filter(r => r.status === 'Отклонено').length,
-  };
+  }), [requests]);
 
-  const filteredRequests = requests.filter(req => {
-    const term = searchTerm.toLowerCase();
-    const nameMatch = req.full_name && req.full_name.toLowerCase().includes(term);
-    const iinMatch = req.iin && req.iin.includes(term);
-    return nameMatch || iinMatch;
-  });
+  const filteredRequests = useMemo(() => {
+    return requests.filter(req => {
+      const term = searchTerm.toLowerCase();
+      const nameMatch = req.full_name && req.full_name.toLowerCase().includes(term);
+      const iinMatch = req.iin && req.iin.includes(term);
+      return nameMatch || iinMatch;
+    });
+  }, [requests, searchTerm]);
 
   const handleExportExcel = async () => {
     const dataToExport = filteredRequests.map(req => {
@@ -139,9 +145,18 @@ export default function Admin() {
             </div>
             <button
               type="submit"
-              className="w-full bg-brand-blue text-white font-bold py-3 rounded-xl hover:bg-brand-dark transition-colors"
+              disabled={isAuthLoading}
+              aria-label="Login"
+              className="w-full bg-brand-blue text-white font-bold py-3 rounded-xl hover:bg-brand-dark transition-colors disabled:opacity-70 flex items-center justify-center"
             >
-              {a.btnLogin}
+              {isAuthLoading ? (
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                a.btnLogin
+              )}
             </button>
           </form>
         </div>
@@ -156,6 +171,7 @@ export default function Admin() {
           <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100">{a.title}</h1>
           <button 
             onClick={handleLogout}
+            aria-label="Logout"
             className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
           >
             {a.btnLogout}
@@ -221,9 +237,10 @@ export default function Admin() {
             </div>
             <button
               onClick={handleExportExcel}
+              aria-label="Export to Excel"
               className="flex items-center w-full sm:w-auto px-4 py-2 bg-brand-blue text-white font-semibold rounded-lg hover:bg-brand-dark transition-colors"
             >
-              <Download className="w-4 h-4 mr-2" />
+              <Download className="w-4 h-4 mr-2" aria-hidden="true" />
               {a.btnExport}
             </button>
           </div>
@@ -264,12 +281,12 @@ export default function Admin() {
                         <div className="text-xs text-slate-500 dark:text-slate-400">{new Date(req.date).toLocaleDateString('ru-RU')}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{req.full_name}</div>
+                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 max-w-[150px] truncate" title={req.full_name}>{req.full_name}</div>
                         <div className="text-xs text-slate-500 dark:text-slate-400">{lang === 'ru' ? 'ИИН' : 'ЖСН'}: {req.iin}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-800 dark:text-slate-200">{req.phone}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">{req.email}</div>
+                        <div className="text-sm text-slate-800 dark:text-slate-200 max-w-[150px] truncate" title={req.phone}>{req.phone}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 max-w-[150px] truncate" title={req.email}>{req.email}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-slate-800 dark:text-slate-200 max-w-xs truncate" title={req.type}>{req.type}</div>

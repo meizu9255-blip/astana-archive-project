@@ -10,12 +10,12 @@ export default function Services() {
   const s = t.services;
 
   const schema = useMemo(() => z.object({
-    fullName: z.string().min(2, s.errors.fio),
+    fullName: z.string().min(2, s.errors.fio).max(255, s.errors.fio),
     iin: z.string().regex(/^\d{12}$/, s.errors.iin),
-    email: z.string().email(s.errors.email),
-    phone: z.string().min(5, s.errors.phone),
-    type: z.string().min(1, s.errors.type),
-    query: z.string().min(5, s.errors.query),
+    email: z.string().email(s.errors.email).max(255),
+    phone: z.string().min(5, s.errors.phone).max(50),
+    type: z.string().min(1, s.errors.type).max(255),
+    query: z.string().min(5, s.errors.query).max(1000, s.errors.query),
   }), [s.errors]);
 
   const {

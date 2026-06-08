@@ -145,9 +145,10 @@ export default function UniversalAssistant() {
     <>
       <button 
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Закрыть чат" : "Открыть чат"}
         className="fixed bottom-6 right-6 z-50 p-4 bg-brand-blue hover:bg-blue-800 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-brand-blue/30"
       >
-        {isOpen ? <X className="w-8 h-8" /> : <MessageCircle className="w-8 h-8" />}
+        {isOpen ? <X className="w-8 h-8" aria-hidden="true" /> : <MessageCircle className="w-8 h-8" aria-hidden="true" />}
       </button>
 
       <AnimatePresence>

@@ -73,8 +73,9 @@ export default function Navbar() {
               onClick={toggleHighContrast}
               className={`text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
               title={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
+              aria-label={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
             >
-              {isHighContrast ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              {isHighContrast ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
             </button>
 
             {/* Dark Mode Toggle */}
@@ -82,8 +83,9 @@ export default function Navbar() {
               onClick={() => setDarkMode(!darkMode)}
               className="text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none"
               title={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
+              aria-label={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
             >
-              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {darkMode ? <Sun className="h-5 w-5" aria-hidden="true" /> : <Moon className="h-5 w-5" aria-hidden="true" />}
             </button>
 
             {/* Переключатель языков Desktop */}
