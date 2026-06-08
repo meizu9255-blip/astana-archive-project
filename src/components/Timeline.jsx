@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
-import { Calendar, ChevronRight } from 'lucide-react';
+import { Calendar, ChevronRight, ArrowRight } from 'lucide-react';
+import DetailsModal from './DetailsModal';
 
 const timelineEvents = [
   {
@@ -9,7 +10,9 @@ const timelineEvents = [
     title_ru: 'Основание архива',
     title_kz: 'Мұрағаттың құрылуы',
     desc_ru: 'Официальное основание Государственного архива.',
-    desc_kz: 'Мемлекеттік мұрағаттың ресми түрде құрылуы.'
+    desc_kz: 'Мемлекеттік мұрағаттың ресми түрде құрылуы.',
+    fullText_ru: 'Государственный архив был официально основан с целью сохранения исторического документального наследия региона.\n\nВ первые годы работы основной задачей было спасение и систематизация документов дореволюционного и раннего советского периодов. Первые поступления включали метрические книги и декреты уездных комитетов.',
+    fullText_kz: 'Мемлекеттік мұрағат аймақтың тарихи құжаттық мұрасын сақтау мақсатында ресми түрде құрылды.\n\nЖұмыстың алғашқы жылдарындағы негізгі міндет төңкеріске дейінгі және ерте кеңестік кезеңдердің құжаттарын сақтап қалу және жүйелеу болды. Алғашқы түсімдерге уездік комитеттердің декреттері мен метрикалық кітаптар кірді.'
   },
   {
     id: 2,
@@ -17,7 +20,9 @@ const timelineEvents = [
     title_ru: 'Перенос столицы и активное комплектование',
     title_kz: 'Елорданы көшіру және белсенді жинақтау',
     desc_ru: 'Перенос столицы и начало активного комплектования фонда города Астана.',
-    desc_kz: 'Елорданы көшіру және Астана қаласының қорын белсенді жинақтаудың басталуы.'
+    desc_kz: 'Елорданы көшіру және Астана қаласының қорын белсенді жинақтаудың басталуы.',
+    fullText_ru: 'С переносом столицы в Акмолу (позже Астана) начался новый, масштабный этап в истории архива.\n\nАрхив стал главным хранилищем документов об историческом решении переноса столицы, генеральном плане застройки левобережья и деятельности новых министерств и ведомств независимого Казахстана.',
+    fullText_kz: 'Елорданың Ақмолаға (кейіннен Астана) көшірілуімен мұрағат тарихында жаңа, ауқымды кезең басталды.\n\nМұрағат елорданы көшіру туралы тарихи шешімнің, сол жағалауды салудың бас жоспарының және тәуелсіз Қазақстанның жаңа министрліктері мен ведомстволары қызметінің құжаттарын сақтайтын басты қоймаға айналды.'
   },
   {
     id: 3,
@@ -25,13 +30,16 @@ const timelineEvents = [
     title_ru: 'Новый Устав учреждения',
     title_kz: 'Мекеменің жаңа Жарғысы',
     desc_ru: 'Принятие нового Устава учреждения, расширяющего спектр архивных услуг.',
-    desc_kz: 'Мұрағаттық қызметтер спектрін кеңейтетін мекеменің жаңа Жарғысын қабылдау.'
+    desc_kz: 'Мұрағаттық қызметтер спектрін кеңейтетін мекеменің жаңа Жарғысын қабылдау.',
+    fullText_ru: 'В 2022 году был принят новый Устав Государственного архива, который закрепил переход к современным стандартам обслуживания.\n\nВнедрены цифровые услуги, запущена электронная база поиска генеалогических данных, а также созданы условия для онлайн-доступа к фондам через Единую информационную систему.',
+    fullText_kz: '2022 жылы Мемлекеттік мұрағаттың жаңа Жарғысы қабылданды, ол қызмет көрсетудің заманауи стандарттарына көшуді бекітті.\n\nЦифрлық қызметтер енгізілді, генеалогиялық деректерді іздеудің электрондық базасы іске қосылды, сондай-ақ Бірыңғай ақпараттық жүйе арқылы қорларға онлайн қол жеткізу үшін жағдайлар жасалды.'
   }
 ];
 
 export default function Timeline() {
   const { lang } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300 overflow-hidden">
@@ -97,13 +105,28 @@ export default function Timeline() {
             <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 leading-tight">
               {timelineEvents[activeIndex][`title_${lang}`]}
             </h3>
-            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed border-l-4 border-brand-blue pl-4">
+            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed border-l-4 border-brand-blue pl-4 mb-6">
               {timelineEvents[activeIndex][`desc_${lang}`]}
             </p>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold dark:hover:text-brand-gold transition-colors mt-auto w-fit"
+            >
+              {lang === 'ru' ? 'Подробнее' : 'Толығырақ'} <ArrowRight className="ml-2 h-4 w-4" />
+            </button>
           </div>
         </div>
 
       </div>
+
+      <DetailsModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={timelineEvents[activeIndex][`title_${lang}`]}
+        meta={timelineEvents[activeIndex].year}
+        content={timelineEvents[activeIndex][`fullText_${lang}`]}
+        icon={Calendar}
+      />
     </div>
   );
 }

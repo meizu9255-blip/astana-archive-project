@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, FolderOpen, AlertCircle, X, ArrowRight, BookOpen, Building2, Camera, FileText } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
-import Timeline from '../components/Timeline';
+import DetailsModal from '../components/DetailsModal';
 
 export default function ArchiveFunds() {
   const { lang, t } = useLanguage();
@@ -185,53 +185,14 @@ export default function ArchiveFunds() {
       </div>
 
       {/* Модальное окно */}
-      {selectedFund && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full relative animate-in fade-in zoom-in duration-300">
-            <button 
-              onClick={() => setSelectedFund(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 bg-slate-100 p-2 rounded-full transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-brand-gold/20 p-3 rounded-xl"><FolderOpen className="text-brand-dark w-6 h-6" /></div>
-              <h2 className="text-2xl font-bold text-slate-800 leading-tight">
-                {selectedFund[`title_${lang}`]}
-              </h2>
-            </div>
-            
-            <div className="space-y-4 text-slate-600 mb-8">
-              <p className="text-lg border-l-4 border-brand-blue pl-4 bg-slate-50 p-4 rounded-r-lg">
-                {selectedFund[`desc_${lang}`]}
-              </p>
-              
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{f.modalShifr}</span>
-                  <span className="font-semibold text-slate-800">{selectedFund.code}</span>
-                </div>
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{f.modalPeriod}</span>
-                  <span className="font-semibold text-slate-800">{selectedFund.period}</span>
-                </div>
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 col-span-2">
-                  <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{f.modalCategory}</span>
-                  <span className="font-semibold text-slate-800">{selectedFund[`category_${lang}`]}</span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setSelectedFund(null)}
-              className="w-full bg-brand-blue text-white font-bold py-3 rounded-xl hover:bg-brand-dark transition-colors"
-            >
-              {f.modalClose}
-            </button>
-          </div>
-        </div>
-      )}
+      <DetailsModal 
+        isOpen={!!selectedFund}
+        onClose={() => setSelectedFund(null)}
+        title={selectedFund ? selectedFund[`title_${lang}`] : ''}
+        meta={selectedFund ? `${f.modalShifr}: ${selectedFund.code} | ${f.modalCategory}: ${selectedFund[`category_${lang}`]} | ${f.modalPeriod}: ${selectedFund.period}` : ''}
+        content={selectedFund ? selectedFund[`fullText_${lang}`] : ''}
+        icon={FolderOpen}
+      />
 
       {/* Историческая лента (Timeline) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">

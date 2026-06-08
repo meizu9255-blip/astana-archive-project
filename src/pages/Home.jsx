@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Archive, FileText, Clock, Users, ArrowRight, Search, FileSearch, BookOpen } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import DetailsModal from '../components/DetailsModal';
 
 export default function Home() {
   const { t } = useLanguage();
@@ -16,10 +17,12 @@ export default function Home() {
   const news = t.home.newsArr;
 
   const services = [
-    { icon: FileSearch, title: t.home.servicesArr[0].title, desc: t.home.servicesArr[0].desc, link: "/services" },
-    { icon: Search, title: t.home.servicesArr[1].title, desc: t.home.servicesArr[1].desc, link: "/funds" },
-    { icon: BookOpen, title: t.home.servicesArr[2].title, desc: t.home.servicesArr[2].desc, link: "/about" },
+    { icon: FileSearch, title: t.home.servicesArr[0].title, desc: t.home.servicesArr[0].desc, fullText: t.home.servicesArr[0].fullText },
+    { icon: Search, title: t.home.servicesArr[1].title, desc: t.home.servicesArr[1].desc, fullText: t.home.servicesArr[1].fullText },
+    { icon: BookOpen, title: t.home.servicesArr[2].title, desc: t.home.servicesArr[2].desc, fullText: t.home.servicesArr[2].fullText },
   ];
+
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const [typedTitle, setTypedTitle] = useState('');
   const fullTitle = t.home.title;
@@ -97,9 +100,9 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3">{service.title}</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">{service.desc}</p>
-                <Link to={service.link} className="inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold dark:hover:text-brand-gold transition-colors cursor-pointer">
+                <button onClick={() => setSelectedItem({ type: 'service', data: service })} className="inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold dark:hover:text-brand-gold transition-colors cursor-pointer">
                   {t.home.readMore} <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </button>
               </div>
             ))}
           </div>
@@ -129,9 +132,9 @@ export default function Home() {
                 <p className="text-slate-600 dark:text-slate-400 group-hover:text-white/80 mb-6 line-clamp-3">
                   {item.description}
                 </p>
-                <Link to="/about" className="inline-flex items-center text-sm font-bold text-brand-blue dark:text-brand-cyan group-hover:text-brand-gold transition-colors cursor-pointer">
+                <button onClick={() => setSelectedItem({ type: 'news', data: item })} className="inline-flex items-center text-sm font-bold text-brand-blue dark:text-brand-cyan group-hover:text-brand-gold transition-colors cursor-pointer">
                   {t.home.readMore} <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </button>
               </div>
             ))}
           </div>
@@ -144,6 +147,14 @@ export default function Home() {
         </div>
       </section>
 
+      <DetailsModal 
+        isOpen={!!selectedItem}
+        onClose={() => setSelectedItem(null)}
+        title={selectedItem?.data?.title || ''}
+        meta={selectedItem?.type === 'news' ? selectedItem.data.date : ''}
+        content={selectedItem?.data?.fullText || ''}
+        icon={selectedItem?.type === 'service' ? selectedItem.data.icon : undefined}
+      />
     </div>
   );
 }
