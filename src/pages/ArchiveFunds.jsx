@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, FolderOpen, AlertCircle, X, ArrowRight, BookOpen, Building2, Camera, FileText } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import DetailsModal from '../components/DetailsModal';
+import Timeline from '../components/Timeline';
+import { fundsData as localFundsData } from '../data';
 
 export default function ArchiveFunds() {
   const { lang, t } = useLanguage();
@@ -23,7 +25,15 @@ export default function ArchiveFunds() {
         return res.json();
       })
       .then(data => {
-        setFundsData(data);
+        const enrichedData = data.map(fund => {
+          const localFund = localFundsData.find(f => f.code === fund.code);
+          return {
+            ...fund,
+            fullText_ru: localFund ? localFund.fullText_ru : fund.desc_ru,
+            fullText_kz: localFund ? localFund.fullText_kz : fund.desc_kz
+          };
+        });
+        setFundsData(enrichedData);
         setIsLoading(false);
       })
       .catch(err => {
