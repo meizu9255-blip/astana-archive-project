@@ -117,9 +117,6 @@ export default function Home() {
               <h2 className="text-2xl md:text-4xl font-extrabold text-slate-800 dark:text-slate-100 mb-4">{t.home.latestNews}</h2>
               <div className="w-24 h-1 bg-brand-gold rounded-full"></div>
             </div>
-            <Link to="/about" className="hidden sm:inline-flex items-center text-brand-blue dark:text-brand-cyan font-bold hover:text-brand-gold transition-colors">
-              {t.home.allNews} <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -137,12 +134,6 @@ export default function Home() {
                 </button>
               </div>
             ))}
-          </div>
-          
-          <div className="mt-8 text-center sm:hidden">
-            <Link to="/about" className="inline-flex items-center text-brand-blue font-bold hover:text-brand-gold transition-colors">
-              {t.home.allNews} <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
           </div>
         </div>
       </section>
