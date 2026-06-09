@@ -133,8 +133,8 @@ export default function Status() {
                 className={`w-full pl-11 pr-4 py-4 rounded-xl border ${error ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue dark:focus:ring-brand-cyan'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
               />
               {error && (
-                <div className="absolute -bottom-6 left-2 flex items-center text-red-500 text-xs mt-1">
-                  <AlertCircle className="w-3 h-3 mr-1" />
+                <div className="flex items-center text-red-500 text-sm mt-2 pl-2">
+                  <AlertCircle className="w-4 h-4 mr-1" />
                   {t.error}
                 </div>
               )}
