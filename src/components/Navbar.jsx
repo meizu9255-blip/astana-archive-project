@@ -109,32 +109,38 @@ export default function Navbar() {
           <div className="2xl:hidden flex items-center space-x-4">
             <button 
               onClick={toggleHighContrast}
-              className={`text-white/70 hover:text-brand-gold transition focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
+              aria-label={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
+              className={`text-white/70 hover:text-brand-gold transition focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center ${isHighContrast ? 'text-brand-gold' : ''}`}
             >
-              {isHighContrast ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
+              {isHighContrast ? <EyeOff className="h-6 w-6" aria-hidden="true" /> : <Eye className="h-6 w-6" aria-hidden="true" />}
             </button>
             <button 
               onClick={() => setDarkMode(!darkMode)}
-              className="text-white/70 hover:text-brand-gold transition focus:outline-none"
+              aria-label={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
+              className="text-white/70 hover:text-brand-gold transition focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              {darkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+              {darkMode ? <Sun className="h-6 w-6" aria-hidden="true" /> : <Moon className="h-6 w-6" aria-hidden="true" />}
             </button>
-            <button onClick={() => setIsOpen(!isOpen)} className="text-white hover:text-brand-gold transition">
-              {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              aria-label={lang === 'ru' ? 'Меню' : 'Мәзір'}
+              className="text-white hover:text-brand-gold transition min-h-[44px] min-w-[44px] flex items-center justify-center"
+            >
+              {isOpen ? <X className="h-7 w-7" aria-hidden="true" /> : <Menu className="h-7 w-7" aria-hidden="true" />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className={`2xl:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className={`2xl:hidden transition-all duration-300 ${isOpen ? 'max-h-[80vh] overflow-y-auto opacity-100' : 'max-h-0 overflow-hidden opacity-0'}`}>
         <div className="bg-brand-blue dark:bg-slate-950 border-t border-white/10 px-4 pt-4 pb-6 flex flex-col gap-2 shadow-inner">
           {links.map(link => (
             <Link
               key={link.path}
               to={link.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-colors whitespace-nowrap
+              className={`block px-4 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-colors whitespace-nowrap min-h-[44px] flex items-center
                 ${isActive(link.path) 
                   ? 'bg-white/10 text-brand-gold' 
                   : 'text-white/90 hover:bg-white/5 hover:text-brand-gold'}
@@ -145,16 +151,18 @@ export default function Navbar() {
           ))}
           {/* Переключатель языков Mobile */}
           <div className="px-4 py-4 flex items-center gap-3 border-t border-white/10 mt-2">
-            <Globe className="h-5 w-5 text-white/70" />
+            <Globe className="h-5 w-5 text-white/70" aria-hidden="true" />
             <button 
               onClick={() => { toggleLanguage('kz'); setIsOpen(false); }}
-              className={`text-sm font-bold px-4 py-2 rounded-lg transition ${lang === 'kz' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
+              aria-label="Қазақ тілі"
+              className={`text-sm font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg transition ${lang === 'kz' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
             >
               KZ
             </button>
             <button 
               onClick={() => { toggleLanguage('ru'); setIsOpen(false); }}
-              className={`text-sm font-bold px-4 py-2 rounded-lg transition ${lang === 'ru' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
+              aria-label="Русский язык"
+              className={`text-sm font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg transition ${lang === 'ru' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
             >
               RU
             </button>
