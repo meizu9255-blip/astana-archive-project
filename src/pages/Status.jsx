@@ -117,21 +117,23 @@ export default function Status() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 border border-slate-100 dark:border-slate-700 transition-colors duration-300"
         >
-          <form onSubmit={handleCheck} className="flex flex-col md:flex-row gap-4 relative">
-            <div className="flex-grow relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-slate-400" />
+          <form onSubmit={handleCheck} className="flex flex-col md:flex-row gap-4 relative md:items-start">
+            <div className="flex-grow flex flex-col">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  value={reqId}
+                  onChange={(e) => {
+                    setReqId(e.target.value);
+                    if (error) setError(false);
+                  }}
+                  placeholder={t.placeholder}
+                  className={`w-full pl-11 pr-4 py-4 rounded-xl border ${error ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue dark:focus:ring-brand-cyan'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
+                />
               </div>
-              <input
-                type="text"
-                value={reqId}
-                onChange={(e) => {
-                  setReqId(e.target.value);
-                  if (error) setError(false);
-                }}
-                placeholder={t.placeholder}
-                className={`w-full pl-11 pr-4 py-4 rounded-xl border ${error ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-brand-blue dark:focus:ring-brand-cyan'} bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-              />
               {error && (
                 <div className="flex items-center text-red-500 text-sm mt-2 pl-2">
                   <AlertCircle className="w-4 h-4 mr-1" />
