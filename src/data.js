@@ -316,7 +316,13 @@ export const siteContent = {
       errorUpdate: 'Ошибка обновления',
       errorDbSave: 'Ошибка при сохранении статуса в БД. Сервер недоступен.',
       errorWrongPass: 'Неверный пароль',
-      errorConnect: 'Ошибка подключения к серверу'
+      errorConnect: 'Ошибка подключения к серверу',
+      enterPdfText: 'Введите текст справки перед генерацией',
+      errorUploadPdf: 'Ошибка загрузки PDF',
+      errorGenPdf: 'Не удалось сгенерировать PDF документ',
+      pdfGenerated: 'PDF сгенерирован',
+      btnGenPdf: 'Сгенерировать PDF и Одобрить',
+      pdfTextPlaceholder: 'Текст справки...'
     }
   },
   kz: {
@@ -565,7 +571,13 @@ export const siteContent = {
       errorUpdate: 'Жаңарту қатесі',
       errorDbSave: 'Мәртебені ДҚ-ға сақтау қатесі. Сервер қолжетімсіз.',
       errorWrongPass: 'Құпия сөз қате',
-      errorConnect: 'Серверге қосылу қатесі'
+      errorConnect: 'Серверге қосылу қатесі',
+      enterPdfText: 'Генерация алдында анықтама мәтінін енгізіңіз',
+      errorUploadPdf: 'PDF жүктеу қатесі',
+      errorGenPdf: 'PDF құжатын құру мүмкін болмады',
+      pdfGenerated: 'PDF құрылды',
+      btnGenPdf: 'PDF құру және Мақұлдау',
+      pdfTextPlaceholder: 'Анықтама мәтіні...'
     }
   }
 };

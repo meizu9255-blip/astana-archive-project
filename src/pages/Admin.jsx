@@ -134,7 +134,7 @@ export default function Admin() {
   const handleGeneratePDF = async (orderId) => {
     const text = adminTexts[orderId];
     if (!text || text.trim() === '') {
-      setToastError('Введите текст справки перед генерацией');
+      setToastError(t.admin.enterPdfText);
       setTimeout(() => setToastError(''), 5000);
       return;
     }
@@ -179,7 +179,7 @@ export default function Admin() {
         body: pdfBlob,
       });
 
-      if (!uploadRes.ok) throw new Error('Ошибка загрузки PDF');
+      if (!uploadRes.ok) throw new Error(t.admin.errorUploadPdf);
       const data = await uploadRes.json();
       
       const updateRes = await fetch(`/api/admin/requests`, {
@@ -198,7 +198,7 @@ export default function Admin() {
       setPdfOrderData(null);
     } catch (err) {
       console.error(err);
-      setToastError('Не удалось сгенерировать PDF документ');
+      setToastError(t.admin.errorGenPdf);
       setTimeout(() => setToastError(''), 5000);
       setPdfOrderData(null);
     } finally {
@@ -423,12 +423,12 @@ export default function Admin() {
                           <div className="flex flex-col space-y-2 w-full mt-2">
                             {req.document_url ? (
                               <a href={req.document_url} target="_blank" rel="noopener noreferrer" className="text-brand-blue hover:underline text-xs flex items-center font-bold">
-                                <FileText className="w-4 h-4 mr-1" /> PDF сгенерирован
+                                <FileText className="w-4 h-4 mr-1" /> {t.admin.pdfGenerated}
                               </a>
                             ) : (
                               <div className="flex flex-col space-y-2 w-full">
                                 <textarea
-                                  placeholder="Анықтама мәтіні / Текст справки..."
+                                  placeholder={t.admin.pdfTextPlaceholder}
                                   className="w-full text-xs p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 min-h-[60px] focus:ring-2 focus:ring-brand-blue outline-none resize-y"
                                   value={adminTexts[req.id] || ''}
                                   onChange={(e) => setAdminTexts({...adminTexts, [req.id]: e.target.value})}
@@ -440,7 +440,7 @@ export default function Admin() {
                                   className="w-full cursor-pointer text-xs bg-brand-gold text-brand-dark px-3 py-1.5 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
                                   <Download className="w-3.5 h-3.5 mr-1" />
-                                  {updatingId === req.id ? 'Генерация...' : 'Сгенерировать PDF и Одобрить'}
+                                  {updatingId === req.id ? '...' : t.admin.btnGenPdf}
                                 </button>
                               </div>
                             )}
