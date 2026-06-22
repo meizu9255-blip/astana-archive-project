@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   // GET /api/admin/requests
   if (req.method === 'GET') {
     try {
-      const { rows } = await pool.query('SELECT * FROM orders ORDER BY date DESC');
+      const { rows } = await pool.query('SELECT *, document_url FROM orders ORDER BY date DESC');
       return res.status(200).json(rows);
     } catch (err) {
       console.error('Error fetching all orders for admin:', err);
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
   // Note: Standard Vercel Serverless doesn't use Express routing like /:id
   // We can pass `id` in the body or query params. Here we use body.
   if (req.method === 'PATCH' || req.method === 'PUT') {
-    const { id, status } = req.body;
+    const { id, status, document_url } = req.body;
     
     if (!id || !status) {
       return res.status(400).json({ error: 'Missing id or status' });
@@ -44,8 +44,8 @@ export default async function handler(req, res) {
 
     try {
       const { rows } = await pool.query(
-        'UPDATE orders SET status = $1 WHERE id = $2 RETURNING *',
-        [status, id]
+        'UPDATE orders SET status = $1, document_url = COALESCE($2, document_url) WHERE id = $3 RETURNING *',
+        [status, document_url || null, id]
       );
       if (rows.length === 0) return res.status(404).json({ error: 'Заявка не найдена' });
       return res.status(200).json(rows[0]);

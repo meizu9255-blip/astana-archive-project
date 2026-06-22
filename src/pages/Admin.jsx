@@ -99,6 +99,33 @@ export default function Admin() {
     }
   };
 
+  const handleFileUpload = async (orderId, file) => {
+    setUpdatingId(orderId);
+    setToastError('');
+    try {
+      const uploadRes = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+        method: 'POST',
+        body: file,
+      });
+      if (!uploadRes.ok) throw new Error('Ошибка загрузки файла');
+      const blob = await uploadRes.json();
+
+      const res = await fetch(`/api/admin/requests`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, status: 'Готово к выдаче', document_url: blob.url })
+      });
+      if (!res.ok) throw new Error(a.errorUpdate);
+      
+      setRequests(prev => prev.map(req => req.id === orderId ? { ...req, document_url: blob.url } : req));
+    } catch (err) {
+      setToastError('Не удалось загрузить PDF документ');
+      setTimeout(() => setToastError(''), 5000);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   const stats = useMemo(() => ({
     received: requests.filter(r => r.status === 'Заявка принята').length,
     in_progress: requests.filter(r => r.status === 'В обработке').length,
@@ -301,7 +328,7 @@ export default function Admin() {
                           {statuses.find(s => s.value === req.status)?.label || req.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center space-x-2">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex flex-col space-y-2">
                         <select
                           className="border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm bg-slate-50 dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                           value={req.status}
@@ -312,6 +339,31 @@ export default function Admin() {
                             <option key={s.value} value={s.value}>{s.label}</option>
                           ))}
                         </select>
+                        {req.status === 'Готово к выдаче' && (
+                          <div className="flex items-center space-x-2">
+                            {req.document_url ? (
+                              <a href={req.document_url} target="_blank" rel="noopener noreferrer" className="text-brand-blue hover:underline text-xs flex items-center font-bold">
+                                <FileText className="w-4 h-4 mr-1" /> PDF загружен
+                              </a>
+                            ) : (
+                              <label className="cursor-pointer text-xs bg-brand-gold text-brand-dark px-3 py-1.5 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center shadow-sm">
+                                <Download className="w-3.5 h-3.5 mr-1" />
+                                {updatingId === req.id ? 'Загрузка...' : 'Загрузить PDF'}
+                                <input 
+                                  type="file" 
+                                  accept="application/pdf" 
+                                  className="hidden" 
+                                  disabled={updatingId === req.id}
+                                  onChange={(e) => {
+                                    if(e.target.files && e.target.files[0]) {
+                                      handleFileUpload(req.id, e.target.files[0]);
+                                    }
+                                  }}
+                                />
+                              </label>
+                            )}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}

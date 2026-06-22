@@ -35,7 +35,8 @@ export default function Status() {
       setStatusResult({
         id: data.id,
         date: new Date(data.date).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'kk-KZ'),
-        dbStatus: data.status
+        dbStatus: data.status,
+        document_url: data.document_url
       });
     } catch (err) {
       console.error(err);
@@ -210,6 +211,23 @@ export default function Status() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {currentDbStatus === 'Готово к выдаче' && statusResult.document_url && (
+              <div className="mt-10 pt-8 border-t border-slate-200 dark:border-slate-700 flex flex-col items-center animate-fade-in-up">
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-4 text-center">
+                  {lang === 'ru' ? 'Ваша архивная справка готова. Вы можете скачать ее в электронном формате (PDF).' : 'Сіздің мұрағаттық анықтамаңыз дайын. Оны электронды форматта (PDF) жүктей аласыз.'}
+                </p>
+                <a
+                  href={statusResult.document_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-brand-gold text-brand-dark px-8 py-4 rounded-xl font-extrabold hover:bg-yellow-500 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center justify-center w-full md:w-auto text-lg"
+                >
+                  <FileText className="w-6 h-6 mr-3" />
+                  {lang === 'ru' ? 'Скачать справку (PDF)' : 'Анықтаманы жүктеп алу (PDF)'}
+                </a>
               </div>
             )}
 

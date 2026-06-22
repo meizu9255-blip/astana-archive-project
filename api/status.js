@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     try {
       // Use ILIKE for case-insensitive matching
       const { rows } = await pool.query(
-        'SELECT id, date, status FROM orders WHERE id ILIKE $1',
+        'SELECT id, date, status, document_url FROM orders WHERE id ILIKE $1',
         [id]
       );
       
