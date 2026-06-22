@@ -4,7 +4,7 @@ import { Search, Download, FileText, CheckCircle, Clock, XCircle, AlertCircle } 
 import Skeleton from '../components/Skeleton';
 import { useLanguage } from '../LanguageContext';
 import OfficialCertificateTemplate from '../components/OfficialCertificateTemplate';
-import html2canvas from 'html2canvas';
+import { toJpeg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 export default function Admin() {
@@ -150,13 +150,14 @@ export default function Admin() {
 
       if (!pdfTemplateRef.current) throw new Error("Template ref not found");
 
-      const canvas = await html2canvas(pdfTemplateRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false
+      const el = pdfTemplateRef.current;
+      
+      // 2. Use html-to-image which natively supports modern CSS like oklch
+      const imgData = await toJpeg(el, { 
+        quality: 1.0, 
+        pixelRatio: 2 
       });
 
-      const imgData = canvas.toDataURL('image/jpeg', 1.0);
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -164,7 +165,7 @@ export default function Admin() {
       });
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfHeight = (el.offsetHeight * pdfWidth) / el.offsetWidth;
       
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
       
