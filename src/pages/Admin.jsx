@@ -20,6 +20,7 @@ export default function Admin() {
   const [error, setError] = useState(null);
   const [toastError, setToastError] = useState('');
   const [updatingId, setUpdatingId] = useState(null);
+  const [adminTexts, setAdminTexts] = useState({});
 
   const statuses = [
     { value: 'Заявка принята', label: lang === 'ru' ? 'Заявка принята' : 'Өтініш қабылданды' },
@@ -126,6 +127,34 @@ export default function Admin() {
     }
   };
 
+  const handleGeneratePDF = async (orderId) => {
+    const text = adminTexts[orderId];
+    if (!text || text.trim() === '') {
+      setToastError('Введите текст справки перед генерацией');
+      setTimeout(() => setToastError(''), 5000);
+      return;
+    }
+    
+    setUpdatingId(orderId);
+    setToastError('');
+    try {
+      const uploadRes = await fetch(`/api/generate-pdf`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, adminText: text }),
+      });
+      if (!uploadRes.ok) throw new Error('Ошибка генерации PDF');
+      const data = await uploadRes.json();
+      
+      setRequests(prev => prev.map(req => req.id === orderId ? { ...req, status: 'Готово к выдаче', document_url: data.url } : req));
+    } catch (err) {
+      setToastError('Не удалось сгенерировать PDF документ');
+      setTimeout(() => setToastError(''), 5000);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   const stats = useMemo(() => ({
     received: requests.filter(r => r.status === 'Заявка принята').length,
     in_progress: requests.filter(r => r.status === 'В обработке').length,
@@ -138,7 +167,9 @@ export default function Admin() {
       const term = searchTerm.toLowerCase();
       const nameMatch = req.full_name && req.full_name.toLowerCase().includes(term);
       const iinMatch = req.iin && req.iin.includes(term);
-      return nameMatch || iinMatch;
+      const phoneMatch = req.phone && req.phone.includes(term);
+      const emailMatch = req.email && req.email.toLowerCase().includes(term);
+      return nameMatch || iinMatch || phoneMatch || emailMatch;
     });
   }, [requests, searchTerm]);
 
@@ -308,8 +339,8 @@ export default function Admin() {
                         <div className="text-xs text-slate-500 dark:text-slate-400">{new Date(req.date).toLocaleDateString('ru-RU')}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 max-w-[150px] truncate" title={req.full_name}>{req.full_name}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">{lang === 'ru' ? 'ИИН' : 'ЖСН'}: {req.iin}</div>
+                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-200" title={req.full_name}>{req.full_name}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">{lang === 'ru' ? 'ИИН' : 'ЖСН'}: {req.iin}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-slate-800 dark:text-slate-200 max-w-[150px] truncate" title={req.phone}>{req.phone}</div>
@@ -340,27 +371,29 @@ export default function Admin() {
                           ))}
                         </select>
                         {req.status === 'Готово к выдаче' && (
-                          <div className="flex items-center space-x-2">
+                          <div className="flex flex-col space-y-2 w-full mt-2">
                             {req.document_url ? (
                               <a href={req.document_url} target="_blank" rel="noopener noreferrer" className="text-brand-blue hover:underline text-xs flex items-center font-bold">
-                                <FileText className="w-4 h-4 mr-1" /> PDF загружен
+                                <FileText className="w-4 h-4 mr-1" /> PDF сгенерирован
                               </a>
                             ) : (
-                              <label className="cursor-pointer text-xs bg-brand-gold text-brand-dark px-3 py-1.5 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center shadow-sm">
-                                <Download className="w-3.5 h-3.5 mr-1" />
-                                {updatingId === req.id ? 'Загрузка...' : 'Загрузить PDF'}
-                                <input 
-                                  type="file" 
-                                  accept="application/pdf" 
-                                  className="hidden" 
+                              <div className="flex flex-col space-y-2 w-full">
+                                <textarea
+                                  placeholder="Анықтама мәтіні / Текст справки..."
+                                  className="w-full text-xs p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 min-h-[60px] focus:ring-2 focus:ring-brand-blue outline-none resize-y"
+                                  value={adminTexts[req.id] || ''}
+                                  onChange={(e) => setAdminTexts({...adminTexts, [req.id]: e.target.value})}
                                   disabled={updatingId === req.id}
-                                  onChange={(e) => {
-                                    if(e.target.files && e.target.files[0]) {
-                                      handleFileUpload(req.id, e.target.files[0]);
-                                    }
-                                  }}
                                 />
-                              </label>
+                                <button
+                                  onClick={() => handleGeneratePDF(req.id)}
+                                  disabled={updatingId === req.id}
+                                  className="w-full cursor-pointer text-xs bg-brand-gold text-brand-dark px-3 py-1.5 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                  <Download className="w-3.5 h-3.5 mr-1" />
+                                  {updatingId === req.id ? 'Генерация...' : 'Сгенерировать PDF и Одобрить'}
+                                </button>
+                              </div>
                             )}
                           </div>
                         )}
