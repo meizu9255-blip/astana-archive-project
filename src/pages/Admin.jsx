@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { exportToExcel } from '../utils/exportToExcel';
 import { Search, Download, FileText, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react';
 import Skeleton from '../components/Skeleton';
 import { useLanguage } from '../LanguageContext';
+import OfficialCertificateTemplate from '../components/OfficialCertificateTemplate';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 export default function Admin() {
   const { t, lang } = useLanguage();
@@ -21,6 +24,8 @@ export default function Admin() {
   const [toastError, setToastError] = useState('');
   const [updatingId, setUpdatingId] = useState(null);
   const [adminTexts, setAdminTexts] = useState({});
+  const [pdfOrderData, setPdfOrderData] = useState(null);
+  const pdfTemplateRef = useRef(null);
 
   const statuses = [
     { value: 'Заявка принята', label: lang === 'ru' ? 'Заявка принята' : 'Өтініш қабылданды' },
@@ -82,7 +87,6 @@ export default function Admin() {
     setUpdatingId(orderId);
     setToastError('');
     try {
-      // Обновляем состояние (state) моментально, чтобы бейдж изменился сразу
       setRequests(prev => prev.map(req => req.id === orderId ? { ...req, status: newStatus } : req));
       
       const res = await fetch(`/api/admin/requests`, {
@@ -137,19 +141,65 @@ export default function Admin() {
     
     setUpdatingId(orderId);
     setToastError('');
+
     try {
-      const uploadRes = await fetch(`/api/generate-pdf`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId, adminText: text }),
+      const targetOrder = requests.find(r => r.id === orderId);
+      setPdfOrderData({ order: targetOrder, adminText: text });
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      if (!pdfTemplateRef.current) throw new Error("Template ref not found");
+
+      const canvas = await html2canvas(pdfTemplateRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false
       });
-      if (!uploadRes.ok) throw new Error('Ошибка генерации PDF');
+
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+      
+      const pdfBlob = pdf.output('blob');
+      
+      const formData = new FormData();
+      formData.append('file', pdfBlob, `certificate_${orderId}.pdf`);
+      
+      const uploadRes = await fetch(`/api/upload?filename=certificate_${orderId}.pdf`, {
+        method: 'POST',
+        body: pdfBlob,
+      });
+
+      if (!uploadRes.ok) throw new Error('Ошибка загрузки PDF');
       const data = await uploadRes.json();
       
+      const updateRes = await fetch(`/api/admin/requests`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: orderId,
+          status: 'Готово к выдаче',
+          document_url: data.url
+        }),
+      });
+
+      if (!updateRes.ok) throw new Error('Ошибка обновления статуса');
+
       setRequests(prev => prev.map(req => req.id === orderId ? { ...req, status: 'Готово к выдаче', document_url: data.url } : req));
+      setPdfOrderData(null);
     } catch (err) {
+      console.error(err);
       setToastError('Не удалось сгенерировать PDF документ');
       setTimeout(() => setToastError(''), 5000);
+      setPdfOrderData(null);
     } finally {
       setUpdatingId(null);
     }
@@ -236,7 +286,6 @@ export default function Admin() {
           </button>
         </div>
 
-        {/* Виджеты статистики */}
         {!isLoading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-between">
@@ -270,7 +319,6 @@ export default function Admin() {
           </div>
         )}
 
-        {/* Панель управления (Поиск и Экспорт) */}
         {toastError && (
           <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-400 rounded-lg shadow-sm animate-fade-in-up flex items-center">
             <AlertCircle className="w-5 h-5 mr-3" />
@@ -415,6 +463,17 @@ export default function Admin() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Hidden Container for PDF Rendering */}
+      <div className="absolute top-[-9999px] left-[-9999px] opacity-0 pointer-events-none z-[-1]">
+        {pdfOrderData && (
+          <OfficialCertificateTemplate 
+            ref={pdfTemplateRef}
+            order={pdfOrderData.order} 
+            adminText={pdfOrderData.adminText} 
+          />
+        )}
       </div>
     </div>
   );
