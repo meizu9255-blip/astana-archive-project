@@ -39,18 +39,18 @@ export default async function handler(req, res) {
     const order = rows[0];
 
     // 2. Fetch Roboto font for Cyrillic support
-    const fontUrl = 'https://raw.githubusercontent.com/google/fonts/main/ofl/roboto/Roboto-Regular.ttf';
+    const fontUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf';
     const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
 
-    const boldFontUrl = 'https://raw.githubusercontent.com/google/fonts/main/ofl/roboto/Roboto-Bold.ttf';
+    const boldFontUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf';
     const boldFontBytes = await fetch(boldFontUrl).then(res => res.arrayBuffer());
 
     // 3. Generate PDF
     const pdfDoc = await PDFDocument.create();
-    pdfDoc.registerFontkit(fontkit);
+    pdfDoc.registerFontkit(fontkit.default || fontkit);
     
-    const customFont = await pdfDoc.embedFont(fontBytes);
-    const customFontBold = await pdfDoc.embedFont(boldFontBytes);
+    const customFont = await pdfDoc.embedFont(Buffer.from(fontBytes));
+    const customFontBold = await pdfDoc.embedFont(Buffer.from(boldFontBytes));
     
     const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
     const { width, height } = page.getSize();
@@ -140,6 +140,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Error generating PDF:', error);
-    return res.status(500).json({ error: 'Failed to generate PDF' });
+    return res.status(500).json({ error: 'Failed to generate PDF', details: error.message, stack: error.stack });
   }
 }
