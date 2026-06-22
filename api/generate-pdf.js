@@ -72,10 +72,10 @@ export default async function handler(req, res) {
     // Date & Request ID
     const today = new Date().toLocaleDateString('ru-RU');
     page.drawText(`Дата / Күні: ${today}`, { x: 50, y, size: 11, font: customFont });
-    page.drawText(`Исх. № / Шығыс №: ${id}`, { x: 50, y - 20, size: 11, font: customFont });
+    page.drawText(`Исх. № / Шығыс №: ${id}`, { x: 50, y: y - 20, size: 11, font: customFont });
     
     // To
-    page.drawText(`Кому / Кімге: ${order.full_name}`, { x: 350, y - 20, size: 11, font: customFont });
+    page.drawText(`Кому / Кімге: ${order.full_name}`, { x: 350, y: y - 20, size: 11, font: customFont });
 
     y -= 80;
 
