@@ -38,11 +38,11 @@ export default async function handler(req, res) {
     }
     const order = rows[0];
 
-    // 2. Fetch Roboto font for Cyrillic support
-    const fontUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf';
+    // 2. Fetch Tinos font (Times New Roman equivalent) for Cyrillic support
+    const fontUrl = 'https://raw.githubusercontent.com/google/fonts/master/ofl/tinos/Tinos-Regular.ttf';
     const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
 
-    const boldFontUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf';
+    const boldFontUrl = 'https://raw.githubusercontent.com/google/fonts/master/ofl/tinos/Tinos-Bold.ttf';
     const boldFontBytes = await fetch(boldFontUrl).then(res => res.arrayBuffer());
 
     // 3. Generate PDF
@@ -61,32 +61,32 @@ export default async function handler(req, res) {
     const headerText1 = "ҚАЗАҚСТАН РЕСПУБЛИКАСЫ АСТАНА ҚАЛАСЫНЫҢ МЕМЛЕКЕТТІК АРХИВІ";
     const headerText2 = "ГОСУДАРСТВЕННЫЙ АРХИВ ГОРОДА АСТАНЫ";
     
-    const headerWidth1 = customFontBold.widthOfTextAtSize(headerText1, 12);
-    page.drawText(headerText1, { x: (width - headerWidth1) / 2, y, size: 12, font: customFontBold, color: rgb(0, 0, 0) });
+    const headerWidth1 = customFontBold.widthOfTextAtSize(headerText1, 14);
+    page.drawText(headerText1, { x: (width - headerWidth1) / 2, y, size: 14, font: customFontBold, color: rgb(0, 0, 0) });
     y -= 20;
-    const headerWidth2 = customFontBold.widthOfTextAtSize(headerText2, 12);
-    page.drawText(headerText2, { x: (width - headerWidth2) / 2, y, size: 12, font: customFontBold, color: rgb(0, 0, 0) });
+    const headerWidth2 = customFontBold.widthOfTextAtSize(headerText2, 14);
+    page.drawText(headerText2, { x: (width - headerWidth2) / 2, y, size: 14, font: customFontBold, color: rgb(0, 0, 0) });
     
     y -= 50;
 
     // Date & Request ID
     const today = new Date().toLocaleDateString('ru-RU');
-    page.drawText(`Дата / Күні: ${today}`, { x: 50, y, size: 11, font: customFont });
-    page.drawText(`Исх. № / Шығыс №: ${id}`, { x: 50, y: y - 20, size: 11, font: customFont });
+    page.drawText(`Дата / Күні: ${today}`, { x: 50, y, size: 14, font: customFont });
+    page.drawText(`Исх. № / Шығыс №: ${id}`, { x: 50, y: y - 20, size: 14, font: customFont });
     
     // To
-    page.drawText(`Кому / Кімге: ${order.full_name}`, { x: 350, y: y - 20, size: 11, font: customFont });
+    page.drawText(`Кому / Кімге: ${order.full_name}`, { x: 350, y: y - 20, size: 14, font: customFont });
 
     y -= 80;
 
     // Title
     const titleText1 = "МҰРАҒАТТЫҚ АНЫҚТАМА";
     const titleText2 = "АРХИВНАЯ СПРАВКА";
-    const titleWidth1 = customFontBold.widthOfTextAtSize(titleText1, 16);
-    page.drawText(titleText1, { x: (width - titleWidth1) / 2, y, size: 16, font: customFontBold });
+    const titleWidth1 = customFontBold.widthOfTextAtSize(titleText1, 18);
+    page.drawText(titleText1, { x: (width - titleWidth1) / 2, y, size: 18, font: customFontBold });
     y -= 25;
-    const titleWidth2 = customFontBold.widthOfTextAtSize(titleText2, 16);
-    page.drawText(titleText2, { x: (width - titleWidth2) / 2, y, size: 16, font: customFontBold });
+    const titleWidth2 = customFontBold.widthOfTextAtSize(titleText2, 18);
+    page.drawText(titleText2, { x: (width - titleWidth2) / 2, y, size: 18, font: customFontBold });
 
     y -= 40;
 
@@ -101,25 +101,25 @@ export default async function handler(req, res) {
       
       for (const word of words) {
         const testLine = currentLine ? `${currentLine} ${word}` : word;
-        const testWidth = customFont.widthOfTextAtSize(testLine, 12);
+        const testWidth = customFont.widthOfTextAtSize(testLine, 14);
         if (testWidth > maxWidth && currentLine !== '') {
-          page.drawText(currentLine, { x: 50, y: bodyY, size: 12, font: customFont });
+          page.drawText(currentLine, { x: 50, y: bodyY, size: 14, font: customFont });
           currentLine = word;
-          bodyY -= 16;
+          bodyY -= 20; // Increased line height for 14pt text
         } else {
           currentLine = testLine;
         }
       }
       if (currentLine) {
-        page.drawText(currentLine, { x: 50, y: bodyY, size: 12, font: customFont });
-        bodyY -= 16;
+        page.drawText(currentLine, { x: 50, y: bodyY, size: 14, font: customFont });
+        bodyY -= 20;
       }
     }
 
     // Footer
     bodyY -= 60;
-    page.drawText("Архив директоры / Директор архива", { x: 50, y: bodyY, size: 12, font: customFontBold });
-    page.drawText("________________________", { x: 350, y: bodyY, size: 12, font: customFont });
+    page.drawText("Архив директоры / Директор архива", { x: 50, y: bodyY, size: 14, font: customFontBold });
+    page.drawText("________________________", { x: 350, y: bodyY, size: 14, font: customFont });
 
     const pdfBytes = await pdfDoc.save();
 
