@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, Landmark, Moon, Sun, Eye, EyeOff } from 'lucide-react';
-import { useLanguage } from '../LanguageContext';
-import { useAccessibility } from '../AccessibilityContext';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Globe, Landmark, Moon, Sun, Eye, EyeOff } from "lucide-react";
+import { useLanguage } from "../LanguageContext";
+import { useAccessibility } from "../AccessibilityContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,30 +11,36 @@ export default function Navbar() {
   const { isHighContrast, toggleHighContrast } = useAccessibility();
 
   const [darkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      return savedTheme === 'dark';
+      return savedTheme === "dark";
     }
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    );
   });
 
   useEffect(() => {
     if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
 
   const links = [
-    { path: '/', label: t.nav.home },
-    { path: '/about', label: t.nav.about },
-    { path: '/funds', label: t.nav.funds },
-    { path: '/services', label: t.nav.services },
-    { path: '/status', label: lang === 'ru' ? 'Статус заявки' : 'Өтініш мәртебесі' },
-    { path: '/contacts', label: t.nav.contacts },
+    { path: "/", label: t.nav.home },
+    { path: "/about", label: t.nav.about },
+    { path: "/funds", label: t.nav.funds },
+    { path: "/services", label: t.nav.services },
+    {
+      path: "/status",
+      label: lang === "ru" ? "Статус заявки" : "Өтініш мәртебесі",
+    },
+    { path: "/contacts", label: t.nav.contacts },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -47,59 +53,89 @@ export default function Navbar() {
             <Link to="/" className="flex items-center gap-3 group">
               <Landmark className="h-9 w-9 text-brand-gold group-hover:scale-105 transition-transform" />
               <div className="flex flex-col text-left justify-center">
-                <span className="text-xs xl:text-sm 2xl:text-base font-bold text-white leading-tight uppercase">Астана қаласының Мемлекеттік архиві</span>
-                <span className="text-[10px] xl:text-xs 2xl:text-sm text-yellow-500 whitespace-nowrap leading-tight uppercase">Государственный архив г. Астаны</span>
+                <span className="text-xs xl:text-sm 2xl:text-base font-bold text-white leading-tight uppercase">
+                  Астана қаласының Мемлекеттік архиві
+                </span>
+                <span className="text-[10px] xl:text-xs 2xl:text-sm text-yellow-500 whitespace-nowrap leading-tight uppercase">
+                  Государственный архив г. Астаны
+                </span>
               </div>
             </Link>
           </div>
 
           <div className="hidden 2xl:flex items-center gap-3 2xl:gap-5 flex-shrink-0">
-            {links.map(link => (
+            {links.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`transition-colors duration-300 text-xs 2xl:text-[13px] font-semibold uppercase tracking-wider py-2 whitespace-nowrap
-                  ${isActive(link.path) 
-                    ? 'text-brand-gold border-b-2 border-brand-gold' 
-                    : 'text-white/90 hover:text-brand-gold'}
+                  ${
+                    isActive(link.path)
+                      ? "text-brand-gold border-b-2 border-brand-gold"
+                      : "text-white/90 hover:text-brand-gold"
+                  }
                 `}
               >
                 {link.label}
               </Link>
             ))}
-            
+
             {/* Accessibility Mode Toggle */}
-            <button 
+            <button
               onClick={toggleHighContrast}
-              className={`text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none ${isHighContrast ? 'text-brand-gold' : ''}`}
-              title={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
-              aria-label={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
+              className={`text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none ${isHighContrast ? "text-brand-gold" : ""}`}
+              title={
+                lang === "ru"
+                  ? "Режим для слабовидящих"
+                  : "Нашар көретіндерге арналған режим"
+              }
+              aria-label={
+                lang === "ru"
+                  ? "Режим для слабовидящих"
+                  : "Нашар көретіндерге арналған режим"
+              }
             >
-              {isHighContrast ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
+              {isHighContrast ? (
+                <EyeOff className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Eye className="h-5 w-5" aria-hidden="true" />
+              )}
             </button>
 
             {/* Dark Mode Toggle */}
-            <button 
+            <button
               onClick={() => setDarkMode(!darkMode)}
               className="text-white/70 hover:text-brand-gold transition ml-2 focus:outline-none"
-              title={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
-              aria-label={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
+              title={
+                lang === "ru"
+                  ? "Переключить темную тему"
+                  : "Қараңғы режимді ауыстыру"
+              }
+              aria-label={
+                lang === "ru"
+                  ? "Переключить темную тему"
+                  : "Қараңғы режимді ауыстыру"
+              }
             >
-              {darkMode ? <Sun className="h-5 w-5" aria-hidden="true" /> : <Moon className="h-5 w-5" aria-hidden="true" />}
+              {darkMode ? (
+                <Sun className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Moon className="h-5 w-5" aria-hidden="true" />
+              )}
             </button>
 
             {/* Переключатель языков Desktop */}
             <div className="flex items-center gap-2 border-l border-white/20 pl-4 lg:pl-6 ml-2 shrink-0">
               <Globe className="h-4 w-4 text-white/70" />
-              <button 
-                onClick={() => toggleLanguage('kz')}
-                className={`text-xs lg:text-sm font-bold px-2 py-1 rounded transition ${lang === 'kz' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
+              <button
+                onClick={() => toggleLanguage("kz")}
+                className={`text-xs lg:text-sm font-bold px-2 py-1 rounded transition ${lang === "kz" ? "bg-blue-600 text-white" : "text-white/60 hover:text-brand-gold"}`}
               >
                 KZ
               </button>
-              <button 
-                onClick={() => toggleLanguage('ru')}
-                className={`text-xs lg:text-sm font-bold px-2 py-1 rounded transition ${lang === 'ru' ? 'bg-blue-600 text-white' : 'text-white/60 hover:text-brand-gold'}`}
+              <button
+                onClick={() => toggleLanguage("ru")}
+                className={`text-xs lg:text-sm font-bold px-2 py-1 rounded transition ${lang === "ru" ? "bg-blue-600 text-white" : "text-white/60 hover:text-brand-gold"}`}
               >
                 RU
               </button>
@@ -107,43 +143,67 @@ export default function Navbar() {
           </div>
 
           <div className="2xl:hidden flex items-center space-x-4">
-            <button 
+            <button
               onClick={toggleHighContrast}
-              aria-label={lang === 'ru' ? 'Режим для слабовидящих' : 'Нашар көретіндерге арналған режим'}
-              className={`text-white/70 hover:text-brand-gold transition focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center ${isHighContrast ? 'text-brand-gold' : ''}`}
+              aria-label={
+                lang === "ru"
+                  ? "Режим для слабовидящих"
+                  : "Нашар көретіндерге арналған режим"
+              }
+              className={`text-white/70 hover:text-brand-gold transition focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center ${isHighContrast ? "text-brand-gold" : ""}`}
             >
-              {isHighContrast ? <EyeOff className="h-6 w-6" aria-hidden="true" /> : <Eye className="h-6 w-6" aria-hidden="true" />}
+              {isHighContrast ? (
+                <EyeOff className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Eye className="h-6 w-6" aria-hidden="true" />
+              )}
             </button>
-            <button 
+            <button
               onClick={() => setDarkMode(!darkMode)}
-              aria-label={lang === 'ru' ? 'Переключить темную тему' : 'Қараңғы режимді ауыстыру'}
+              aria-label={
+                lang === "ru"
+                  ? "Переключить темную тему"
+                  : "Қараңғы режимді ауыстыру"
+              }
               className="text-white/70 hover:text-brand-gold transition focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              {darkMode ? <Sun className="h-6 w-6" aria-hidden="true" /> : <Moon className="h-6 w-6" aria-hidden="true" />}
+              {darkMode ? (
+                <Sun className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Moon className="h-6 w-6" aria-hidden="true" />
+              )}
             </button>
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              aria-label={lang === 'ru' ? 'Меню' : 'Мәзір'}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={lang === "ru" ? "Меню" : "Мәзір"}
               className="text-white hover:text-brand-gold transition min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
-              {isOpen ? <X className="h-7 w-7" aria-hidden="true" /> : <Menu className="h-7 w-7" aria-hidden="true" />}
+              {isOpen ? (
+                <X className="h-7 w-7" aria-hidden="true" />
+              ) : (
+                <Menu className="h-7 w-7" aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className={`2xl:hidden transition-all duration-300 ${isOpen ? 'max-h-[80vh] overflow-y-auto opacity-100' : 'max-h-0 overflow-hidden opacity-0'}`}>
+      <div
+        className={`2xl:hidden transition-all duration-300 ${isOpen ? "max-h-[80vh] overflow-y-auto opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
+      >
         <div className="bg-brand-blue dark:bg-slate-950 border-t border-white/10 px-4 pt-4 pb-6 flex flex-col gap-2 shadow-inner">
-          {links.map(link => (
+          {links.map((link) => (
             <Link
               key={link.path}
               to={link.path}
               onClick={() => setIsOpen(false)}
               className={`block px-4 py-3 rounded-lg text-sm font-semibold uppercase tracking-wide transition-colors whitespace-nowrap min-h-[44px] flex items-center
-                ${isActive(link.path) 
-                  ? 'bg-white/10 text-brand-gold' 
-                  : 'text-white/90 hover:bg-white/5 hover:text-brand-gold'}
+                ${
+                  isActive(link.path)
+                    ? "bg-white/10 text-brand-gold"
+                    : "text-white/90 hover:bg-white/5 hover:text-brand-gold"
+                }
               `}
             >
               {link.label}
@@ -152,17 +212,23 @@ export default function Navbar() {
           {/* Переключатель языков Mobile */}
           <div className="px-4 py-4 flex items-center gap-3 border-t border-white/10 mt-2">
             <Globe className="h-5 w-5 text-white/70" aria-hidden="true" />
-            <button 
-              onClick={() => { toggleLanguage('kz'); setIsOpen(false); }}
+            <button
+              onClick={() => {
+                toggleLanguage("kz");
+                setIsOpen(false);
+              }}
               aria-label="Қазақ тілі"
-              className={`text-sm font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg transition ${lang === 'kz' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
+              className={`text-sm font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg transition ${lang === "kz" ? "bg-blue-600 text-white shadow-md" : "text-white/60 hover:text-brand-gold hover:bg-white/5"}`}
             >
               KZ
             </button>
-            <button 
-              onClick={() => { toggleLanguage('ru'); setIsOpen(false); }}
+            <button
+              onClick={() => {
+                toggleLanguage("ru");
+                setIsOpen(false);
+              }}
               aria-label="Русский язык"
-              className={`text-sm font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg transition ${lang === 'ru' ? 'bg-blue-600 text-white shadow-md' : 'text-white/60 hover:text-brand-gold hover:bg-white/5'}`}
+              className={`text-sm font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg transition ${lang === "ru" ? "bg-blue-600 text-white shadow-md" : "text-white/60 hover:text-brand-gold hover:bg-white/5"}`}
             >
               RU
             </button>

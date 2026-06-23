@@ -1,28 +1,33 @@
-import React, { useEffect } from 'react';
-import { X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect } from "react";
+import { X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function DetailsModal({ isOpen, onClose, title, content, meta, icon: Icon }) {
-  // Закрытие по нажатию на Escape
+export default function DetailsModal({
+  isOpen,
+  onClose,
+  title,
+  content,
+  meta,
+  icon: Icon,
+}) {
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         onClose();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Блокировка прокрутки фона
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -41,13 +46,12 @@ export default function DetailsModal({ isOpen, onClose, title, content, meta, ic
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl relative z-10 overflow-hidden flex flex-col max-h-[90vh]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
           >
-            {/* Header */}
             <div className="flex items-start justify-between p-6 md:p-8 border-b border-slate-100 dark:border-slate-700">
               <div className="flex items-center space-x-3 pr-8">
                 {Icon && (
@@ -56,7 +60,10 @@ export default function DetailsModal({ isOpen, onClose, title, content, meta, ic
                   </div>
                 )}
                 <div>
-                  <h2 id="modal-title" className="text-2xl font-bold text-slate-800 dark:text-slate-100 leading-tight">
+                  <h2
+                    id="modal-title"
+                    className="text-2xl font-bold text-slate-800 dark:text-slate-100 leading-tight"
+                  >
                     {title}
                   </h2>
                   {meta && (
@@ -75,14 +82,12 @@ export default function DetailsModal({ isOpen, onClose, title, content, meta, ic
               </button>
             </div>
 
-            {/* Body */}
             <div className="p-6 md:p-8 overflow-y-auto max-h-[80vh]">
               <div className="text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line text-lg">
                 {content}
               </div>
             </div>
-            
-            {/* Footer */}
+
             <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700 flex justify-end">
               <button
                 onClick={onClose}

@@ -1,10 +1,10 @@
-import React, { createContext, useState, useContext } from 'react';
-import { siteContent } from './data';
+import React, { createContext, useState, useContext } from "react";
+import { siteContent } from "./data";
 
 const LanguageContext = createContext();
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState('ru'); // 'ru' или 'kz'
+  const [lang, setLang] = useState("ru");
 
   const toggleLanguage = (selectedLang) => {
     setLang(selectedLang);
@@ -13,7 +13,7 @@ export function LanguageProvider({ children }) {
   const value = {
     lang,
     toggleLanguage,
-    t: siteContent[lang]
+    t: siteContent[lang],
   };
 
   return (
