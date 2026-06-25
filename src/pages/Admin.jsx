@@ -8,6 +8,8 @@ import {
   Clock,
   XCircle,
   AlertCircle,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import Skeleton from "../components/Skeleton";
 import { useLanguage } from "../LanguageContext";
@@ -22,6 +24,7 @@ export default function Admin() {
     return localStorage.getItem("isAdmin") === "true";
   });
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
@@ -284,14 +287,21 @@ export default function Admin() {
             {a.loginTitle}
           </h2>
           <form onSubmit={handleLogin} className="space-y-4">
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={a.passwordPlaceholder}
-                className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-blue bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-blue bg-slate-50 dark:bg-slate-700 dark:text-slate-100 transition-colors pr-10"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
               {authError && (
                 <p className="text-red-500 text-sm mt-2">{authError}</p>
               )}
